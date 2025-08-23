@@ -1,0 +1,11 @@
+groq
+flask
+flask_cors
+flask_sqlalchemy
+dotenv
+scikit-learn
+statsmodels
+psycopg2-binary
+flask_mail
+reportlab
+requests
