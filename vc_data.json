@@ -1,0 +1,214 @@
+{
+  "venture_capitalists": [
+    {
+      "id": 1,
+      "name": "Anand Daniel",
+      "photo": "https://images.yourstory.com/cs/2/96eabe90392211e9aa9e0242ac110004/AnandDaniel-1562659995622.jpg",
+      "company": "Accel Partners",
+      "domain": ["Fintech", "SaaS", "B2B Software"],
+      "experience": "15+ years",
+      "bio": "Anand Daniel is a Partner at Accel Partners India, focusing on early-stage technology investments. He has led investments in companies like Flipkart, Freshworks, and BrowserStack. Prior to Accel, he worked at McKinsey & Company.",
+      "schedule": {
+        "2025-08-25": {
+          "09:00": true,
+          "10:00": false,
+          "11:00": true,
+          "14:00": true,
+          "15:00": false,
+          "16:00": true
+        },
+        "2025-08-26": {
+          "09:00": false,
+          "10:00": true,
+          "11:00": false,
+          "14:00": true,
+          "15:00": true,
+          "16:00": false
+        },
+        "2025-08-27": {
+          "09:00": true,
+          "10:00": true,
+          "11:00": false,
+          "14:00": false,
+          "15:00": true,
+          "16:00": true
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "Shailendra Singh",
+      "photo": "https://media.licdn.com/dms/image/C4D03AQHxK7QZsZWJSQ/profile-displayphoto-shrink_800_800/0/1517075552463?e=2147483647&v=beta&t=xKqPbCQk2dO3NvHr5Zp8S6y9X4A8mF7tKhGvB2cN1dE",
+      "company": "Sequoia Capital India",
+      "domain": ["Consumer Internet", "Fintech", "Healthcare"],
+      "experience": "18+ years",
+      "bio": "Shailendra Singh is the Managing Director of Sequoia Capital India. He has been instrumental in investments in Zomato, Byju's, and OYO. He started his career at McKinsey and later joined Sequoia in 2007.",
+      "schedule": {
+        "2025-08-25": {
+          "10:00": true,
+          "11:00": false,
+          "14:00": false,
+          "15:00": true,
+          "16:00": true,
+          "17:00": false
+        },
+        "2025-08-26": {
+          "09:00": true,
+          "10:00": false,
+          "11:00": true,
+          "14:00": false,
+          "15:00": false,
+          "16:00": true
+        },
+        "2025-08-27": {
+          "10:00": false,
+          "11:00": true,
+          "14:00": true,
+          "15:00": false,
+          "16:00": false,
+          "17:00": true
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "Ravi Adusumalli",
+      "photo": "https://images.yourstory.com/cs/1/440a38c0cf3a11e8a9ac0242ac110003/RaviAdusumalli1-1544691904167.jpg",
+      "company": "Elevation Capital",
+      "domain": ["Enterprise Software", "EdTech", "HealthTech"],
+      "experience": "12+ years",
+      "bio": "Ravi Adusumalli is a Managing Partner at Elevation Capital. He has led investments in companies like Paytm, Swiggy, and Unacademy. Previously, he worked at SAIF Partners for over a decade.",
+      "schedule": {
+        "2025-08-25": {
+          "09:00": false,
+          "10:00": true,
+          "11:00": true,
+          "14:00": true,
+          "15:00": false,
+          "16:00": false
+        },
+        "2025-08-26": {
+          "09:00": true,
+          "10:00": true,
+          "11:00": false,
+          "14:00": true,
+          "15:00": true,
+          "16:00": true
+        },
+        "2025-08-27": {
+          "09:00": false,
+          "10:00": false,
+          "11:00": true,
+          "14:00": false,
+          "15:00": true,
+          "16:00": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "Sasha Mirchandani",
+      "photo": "https://media.licdn.com/dms/image/C4D03AQF5K8qGmY2YdQ/profile-displayphoto-shrink_800_800/0/1517420815967?e=2147483647&v=beta&t=nM8P9wX3jL4kR6vT2qA5bC7sF9gH1iJ0kL2mN3oP4qR",
+      "company": "Kae Capital",
+      "domain": ["SaaS", "Deep Tech", "B2B Marketplaces"],
+      "experience": "16+ years",
+      "bio": "Sasha Mirchandani is the Managing Partner at Kae Capital. He has invested in companies like Purplle, M2P Fintech, and Whatfix. He previously worked at New Silk Route and started his career in investment banking.",
+      "schedule": {
+        "2025-08-25": {
+          "09:00": true,
+          "10:00": false,
+          "11:00": false,
+          "14:00": true,
+          "15:00": true,
+          "16:00": false
+        },
+        "2025-08-26": {
+          "09:00": false,
+          "10:00": true,
+          "11:00": true,
+          "14:00": false,
+          "15:00": true,
+          "16:00": true
+        },
+        "2025-08-27": {
+          "09:00": true,
+          "10:00": true,
+          "11:00": false,
+          "14:00": true,
+          "15:00": false,
+          "16:00": false
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "Mohit Bhatnagar",
+      "photo": "https://media.licdn.com/dms/image/C5103AQHtKqFgJzYzjw/profile-displayphoto-shrink_800_800/0/1516846085547?e=2147483647&v=beta&t=dF8gH2iJ3kL4mN5oP6qR7sT8uV9wX0yZ1aB2cD3eF4g",
+      "company": "Sequoia Capital India",
+      "domain": ["Mobile First", "Consumer Apps", "Gaming"],
+      "experience": "14+ years",
+      "bio": "Mohit Bhatnagar is a Principal at Sequoia Capital India, focusing on mobile-first businesses and consumer applications. He has worked on investments in companies like MPL, Gojek, and Truecaller.",
+      "schedule": {
+        "2025-08-25": {
+          "10:00": false,
+          "11:00": true,
+          "14:00": false,
+          "15:00": false,
+          "16:00": true,
+          "17:00": true
+        },
+        "2025-08-26": {
+          "09:00": true,
+          "10:00": false,
+          "11:00": false,
+          "14:00": true,
+          "15:00": false,
+          "16:00": true
+        },
+        "2025-08-27": {
+          "09:00": false,
+          "10:00": true,
+          "11:00": true,
+          "14:00": true,
+          "15:00": true,
+          "16:00": false
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "Priya Mohan",
+      "photo": "https://media.licdn.com/dms/image/C4E03AQGnK8qL5Y2XdQ/profile-displayphoto-shrink_800_800/0/1584091234567?e=2147483647&v=beta&t=hI9jK0lM1nN2oP3qR4sT5uV6wX7yZ8aB9cD0eF1gH2i",
+      "company": "Lightspeed Venture Partners",
+      "domain": ["Enterprise SaaS", "AI/ML", "Cybersecurity"],
+      "experience": "11+ years",
+      "bio": "Priya Mohan is a Partner at Lightspeed Venture Partners India, specializing in enterprise software investments. She has led investments in companies like Darwinbox, Innovaccer, and Hackerearth.",
+      "schedule": {
+        "2025-08-25": {
+          "09:00": true,
+          "10:00": true,
+          "11:00": false,
+          "14:00": false,
+          "15:00": true,
+          "16:00": false
+        },
+        "2025-08-26": {
+          "09:00": false,
+          "10:00": false,
+          "11:00": true,
+          "14:00": true,
+          "15:00": false,
+          "16:00": true
+        },
+        "2025-08-27": {
+          "09:00": true,
+          "10:00": false,
+          "11:00": false,
+          "14:00": true,
+          "15:00": true,
+          "16:00": true
+        }
+      }
+    }
+  ]
+}
