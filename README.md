@@ -58,6 +58,5 @@ git checkout grow
 npm install
 npm run dev
 
----
 
-Would you like me to **make this README more visually appealing with badges (e.g., Next.js, Node.js, License, PRs Welcome) and an architecture diagram**? Or keep it purely minimal text?
+
