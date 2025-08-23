@@ -1,0 +1,152 @@
+{
+  "startup_news": [
+    {
+      "id": 1,
+      "title": "Indian Startup Funding Reaches $8.2B in Q3 2025",
+      "summary": "Venture capital investments in Indian startups show strong growth, with fintech and AI companies leading the charge. The funding landscape has shown remarkable resilience despite global economic uncertainties.",
+      "category": "Funding",
+      "time": "2 hours ago",
+      "source": "TechCrunch India",
+      "url": "https://techcrunch.com/indian-startup-funding-q3-2025",
+      "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 2,
+      "title": "AI-Powered Healthcare Startups See 40% Growth",
+      "summary": "Healthcare technology companies leveraging artificial intelligence are attracting significant investor attention. Medical diagnostic AI and telemedicine platforms are experiencing unprecedented growth.",
+      "category": "HealthTech",
+      "time": "4 hours ago",
+      "source": "YourStory",
+      "url": "https://yourstory.com/ai-healthcare-startups-growth",
+      "image": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 3,
+      "title": "Sequoia Capital India Launches $2.8B Fund",
+      "summary": "Major venture capital firm announces new fund focusing on early-stage Indian startups across multiple sectors. The fund will focus on AI, fintech, and sustainable technology companies.",
+      "category": "VC News",
+      "time": "6 hours ago",
+      "source": "Economic Times",
+      "url": "https://economictimes.com/sequoia-india-new-fund",
+      "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 4,
+      "title": "EdTech Market Expected to Reach $30B by 2027",
+      "summary": "Educational technology sector shows promising growth trajectory with increased adoption of digital learning. K-12 and professional skill development platforms are leading the market expansion.",
+      "category": "EdTech",
+      "time": "8 hours ago",
+      "source": "Inc42",
+      "url": "https://inc42.com/edtech-market-growth-2027",
+      "image": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 5,
+      "title": "Climate Tech Startups Raise Record $3.5B This Quarter",
+      "summary": "Clean technology and sustainability-focused startups are attracting unprecedented investment as ESG priorities drive venture capital decisions.",
+      "category": "ClimeTech",
+      "time": "12 hours ago",
+      "source": "VCCircle",
+      "url": "https://vccircle.com/climate-tech-funding-record",
+      "image": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 6,
+      "title": "Flipkart Leads $500M Round in Logistics Startup",
+      "summary": "E-commerce giant Flipkart leads major funding round in supply chain and logistics technology startup, signaling increased focus on infrastructure investments.",
+      "category": "Logistics",
+      "time": "1 day ago",
+      "source": "Mint",
+      "url": "https://livemint.com/flipkart-logistics-investment",
+      "image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 7,
+      "title": "SaaS Startups in India Cross 1000 Mark",
+      "summary": "India's Software-as-a-Service startup ecosystem reaches new milestone with over 1000 active companies, generating $12B in annual revenue.",
+      "category": "SaaS",
+      "time": "1 day ago",
+      "source": "Forbes India",
+      "url": "https://forbesindia.com/indian-saas-startups-milestone",
+      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 8,
+      "title": "Fintech Lending Platforms Show 60% YoY Growth",
+      "summary": "Digital lending platforms are experiencing massive growth as traditional banking struggles to serve underbanked populations in rural and semi-urban areas.",
+      "category": "Fintech",
+      "time": "2 days ago",
+      "source": "Business Standard",
+      "url": "https://business-standard.com/fintech-lending-growth",
+      "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 9,
+      "title": "Gaming Startups Attract $800M in Series A Rounds",
+      "summary": "Mobile gaming and esports startups are seeing increased investor interest, with several companies raising significant Series A funding rounds this quarter.",
+      "category": "Gaming",
+      "time": "2 days ago",
+      "source": "Entrackr",
+      "url": "https://entrackr.com/gaming-startups-series-a-funding",
+      "image": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 10,
+      "title": "B2B Marketplace Startups Gain Traction",
+      "summary": "Business-to-business marketplace platforms are revolutionizing traditional supply chains, with several startups reaching unicorn valuations this year.",
+      "category": "B2B",
+      "time": "3 days ago",
+      "source": "The Ken",
+      "url": "https://the-ken.com/b2b-marketplace-traction",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 11,
+      "title": "Cryptocurrency Exchanges See Regulatory Clarity",
+      "summary": "Indian cryptocurrency and blockchain startups are experiencing renewed investor confidence following clearer regulatory guidelines from financial authorities.",
+      "category": "Crypto",
+      "time": "3 days ago",
+      "source": "CoinDesk India",
+      "url": "https://coindesk.com/india-crypto-regulatory-clarity",
+      "image": "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=200&fit=crop"
+    },
+    {
+      "id": 12,
+      "title": "Agtech Startups Address Food Security Challenges",
+      "summary": "Agricultural technology companies are developing innovative solutions for crop monitoring, precision farming, and supply chain optimization to enhance food security.",
+      "category": "AgTech",
+      "time": "4 days ago",
+      "source": "Rural Marketing",
+      "url": "https://ruralmarketing.in/agtech-food-security",
+      "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=200&fit=crop"
+    }
+  ],
+  "categories": [
+    "Funding",
+    "HealthTech",
+    "VC News",
+    "EdTech",
+    "ClimeTech",
+    "Logistics",
+    "SaaS",
+    "Fintech",
+    "Gaming",
+    "B2B",
+    "Crypto",
+    "AgTech"
+  ],
+  "sources": [
+    "TechCrunch India",
+    "YourStory",
+    "Economic Times",
+    "Inc42",
+    "VCCircle",
+    "Mint",
+    "Forbes India",
+    "Business Standard",
+    "Entrackr",
+    "The Ken",
+    "CoinDesk India",
+    "Rural Marketing"
+  ]
+}
