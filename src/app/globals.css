@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0f8ff;
+  --color-primary-75: #e0f0ff;
+  --color-primary-100: #d0e8ff;
+  --color-primary-150: #c0e0ff;
+  --color-primary-200: #b0d8ff;
+  --color-primary-250: #a0d0ff;
+  --color-primary-300: #90c8ff;
+  --color-primary-350: #80c0ff;
+  --color-primary-400: #70b8ff;
+  --color-primary-500: #60b0ff; /* MAIN BLUE */
+  --color-primary-600: #549ede;
+  --color-primary-700: #488bbc;
+  --color-primary-800: #3c7899;
+  --color-primary-900: #306577;
+  --color-primary-1000: #245255;
+  --color-primary-1100: #183f44;
+  --color-primary-1200: #0d2c33;
+  --color-primary-1300: #091e24;
+  --color-primary-1400: #041015;
+  --color-primary-1500: #020a0c;
+
+  --font-sans: "Poppins", sans-serif;
+
+  --color-primary-glow: rgba(96, 176, 255, 0.25); /* Glow in blue */
+  --color-primary-50-glow: rgba(240, 248, 255, 0.25);
+
+  --color-brand-50: #e6f0ff;
+  --color-brand-100: #cce0ff;
+  --color-brand-200: #99c2ff;
+  --color-brand-300: #66a3ff;
+  --color-brand-400: #3385ff;
+  --color-brand-500: #0066ff; /* BRAND COLOR */
+  --color-brand-600: #0052cc;
+  --color-brand-700: #003d99;
+  --color-brand-800: #002966;
+  --color-brand-900: #001433;
+
+  --color-brand-glow: rgba(0, 102, 255, 0.3);
+}

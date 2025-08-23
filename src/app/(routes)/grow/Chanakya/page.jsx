@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Send } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Send, User, Sparkles, BookOpen, Target, ArrowRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useUser } from "@clerk/nextjs";
 
@@ -11,6 +11,17 @@ const Chatbot = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    // Auto-scroll to bottom when messages change
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isLoading]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     useEffect(() => {
         if (!isLoaded || !user?.id) return;
@@ -79,6 +90,7 @@ If it's just a greeting in the next prompt, then just greet them, nothing else.
         const currMessage=[...messages, userMessage]
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
+        setIsLoading(true);
 
         try {
             if (!api) {
@@ -108,57 +120,212 @@ If it's just a greeting in the next prompt, then just greet them, nothing else.
             setMessages((prev) => [...prev, { content: data.message, role: "assistant" }]);
         } catch (error) {
             console.error("Error sending message:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
             handleSend();
         }
     };
 
+    // Suggested prompts for the user
+    const suggestedPrompts = [
+        "How can I reduce my recurring expenses?",
+        "What's the best way to allocate my monthly budget?",
+        "How can I increase my savings effectively?",
+        "What cost optimization strategies do you recommend?"
+    ];
+
     return (
-        <div className="flex flex-col h-screen mx-auto bg-gray-900 text-white">
-            <div className="flex-1 p-4 overflow-y-auto max-h-[80vh] space-y-4 md:mx-20">
-                {messages.length > 1 ? (
-                    messages.map((msg, index) =>
-                        msg.role !== "system" && (
-                            <div
-                                key={index}
-                                className={`flex items-center ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                            >
-                                <div
-                                    className={`rounded-lg p-3 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg shadow-md text-sm ${msg.role === "user"
-                                            ? "bg-lime-500 text-black"
-                                            : "bg-gray-800 text-white"
-                                        }`}
-                                >
-                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+        <div className="flex flex-col h-screen bg-gradient-to-br from-primary-1500 to-primary-1400">
+            {/* Header */}
+
+ 
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto bg-gradient-to-b from-primary-1500/30 to-primary-1400/20">
+                <div className="max-w-4xl mx-auto px-6 py-6 space-y-6">
+                    {messages.length > 1 ? (
+                        <>
+                            {messages.map((msg, index) =>
+                                msg.role !== "system" && (
+                                    <div
+                                        key={index}
+                                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                                    >
+                                        <div className={`flex ${msg.role === "user" ? "flex-row-reverse" : "flex-row"} items-start max-w-2xl gap-3`}>
+                                            {/* Avatar */}
+                                            <div className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-1 overflow-hidden ${
+                                                msg.role === "assistant" 
+                                                    ? "bg-gradient-to-r from-primary-500 to-brand-500" 
+                                                    : "bg-primary-1200 border border-primary-1100/30"
+                                            }`}>
+                                                {msg.role === "assistant" ? (
+                                                    <img 
+                                                        src="/chanakya.jpeg" 
+                                                        alt="Chanakya" 
+                                                        className="w-7 h-7 object-contain rounded-full"
+                                                    />
+                                                ) : (
+                                                    <User className="w-5 h-5 text-primary-300" />
+                                                )}
+                                            </div>
+                                            
+                                            {/* Message Bubble */}
+                                            <div
+                                                className={`rounded-2xl px-4 py-3 max-w-md ${
+                                                    msg.role === "user"
+                                                        ? "bg-gradient-to-r from-primary-500 to-brand-500 text-white ml-2"
+                                                        : "bg-primary-1300/50 backdrop-blur-sm border border-primary-1100/30 text-gray-100"
+                                                }`}
+                                            >
+                                                <div className="text-sm leading-relaxed markdown-content">
+                                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            )}
+                            
+                            {/* Loading Animation */}
+                            {isLoading && (
+                                <div className="flex justify-start">
+                                    <div className="flex items-start gap-3 max-w-2xl">
+                                        <div className="w-9 h-9 rounded-full bg-gradient-to-r from-primary-500 to-brand-500 flex items-center justify-center flex-shrink-0 mt-1 overflow-hidden">
+                                            <img 
+                                                src="/chanakya.jpeg"  
+                                                alt="Chanakya" 
+                                                className="w-7 h-7 object-contain"
+                                            />
+                                        </div>
+                                        <div className="bg-primary-1300/50 backdrop-blur-sm border border-primary-1100/30 text-gray-300 rounded-2xl px-4 py-3">
+                                            <div className="flex items-center text-sm">
+                                                <div className="animate-pulse flex space-x-2">
+                                                    <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
+                                                    <div className="w-2 h-2 bg-primary-400 rounded-full animation-delay-200"></div>
+                                                    <div className="w-2 h-2 bg-primary-400 rounded-full animation-delay-400"></div>
+                                                </div>
+                                                <span className="ml-2">Analyzing your query...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {/* Invisible element to scroll to */}
+                            <div ref={messagesEndRef} />
+                        </>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-full py-12">
+                            <div className="bg-primary-1300/30 backdrop-blur-sm border border-primary-1100/30 rounded-3xl p-8 max-w-lg w-full">
+                                <div className="text-center ">
+                                    <div className="bg-gradient-to-r from-primary-500 to-brand-500 rounded-2xl inline-flex overflow-hidden">
+                                        <img 
+                                            src="/chanakya.jpeg" 
+                                            alt="Chanakya" 
+                                            className="w-12 h-12 object-contain"
+                                        />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-white mb-2">Welcome to Chanakya AI</h2>
+                                    <p className="text-primary-300">Your professional business advisory assistant for cost planning and financial strategy.</p>
+                                </div>
+                                
+                                <div className="space-y-4">
+                                    <h3 className="text-primary-200 font-medium flex items-center">
+                                        <Sparkles className="w-4 h-4 mr-2 text-brand-400" />
+                                        Try asking about:
+                                    </h3>
+                                    
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {suggestedPrompts.map((prompt, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => {
+                                                    setInput(prompt);
+                                                    setTimeout(() => {
+                                                        document.querySelector("input").focus();
+                                                    }, 100);
+                                                }}
+                                                className="text-left p-3 bg-primary-1200/30 hover:bg-primary-1200/50 border border-primary-1100/30 rounded-xl transition-all duration-200 group"
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-primary-200 text-sm">{prompt}</span>
+                                                    <ArrowRight className="w-4 h-4 text-primary-400 group-hover:text-brand-400 transition-colors" />
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        )
-                    )
-                ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500 text-lg">
-                        <ReactMarkdown>**Ask Anything to Chanakya**</ReactMarkdown>
+                            
+                            <div className="mt-8 flex items-center text-xs text-primary-400">
+                                <Target className="w-3 h-3 mr-1" />
+                                <span>Powered by advanced financial AI • Professional consultation</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Input Area */}
+            <div className="border-t border-primary-1100/30 bg-primary-1300/50 backdrop-blur-sm px-6 py-4">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex items-center gap-3">
+                        <div className="flex-1 relative">
+                            <input
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                disabled={isLoading}
+                                placeholder="Ask about cost optimization, budgeting, or financial strategy..."
+                                className="w-full px-4 py-3 bg-primary-1200/30 border border-primary-1100/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/30 text-white placeholder-primary-400 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm"
+                            />
+                        </div>
+                        <button
+                            onClick={handleSend}
+                            disabled={!input.trim() || isLoading}
+                            className="p-3 bg-gradient-to-r from-primary-500 to-brand-500 text-white rounded-xl hover:from-primary-600 hover:to-brand-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
+                        >
+                            {isLoading ? (
+                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            ) : (
+                                <Send size={18} />
+                            )}
+                        </button>
                     </div>
-                )}
+                    <div className="mt-3 text-xs text-primary-400 text-center flex items-center justify-center">
+                        <BookOpen className="w-3 h-3 mr-1" />
+                        <span>Professional business consultation • Powered by AI</span>
+                    </div>
+                </div>
             </div>
-            <div className="p-4 m-4 rounded-full bg-gray-800 flex items-center gap-2 justify-center mx-auto w-[600px]">
-                <input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Type a message..."
-                    className="flex-1 px-4 py-2 bg-gray-700 text-white rounded-full outline-none"
-                />
-                <button
-                    onClick={handleSend}
-                    className="bg-lime-500 p-2 rounded-full hover:bg-lime-600"
-                >
-                    <Send className="text-black" size={20} />
-                </button>
-            </div>
+            
+            <style jsx>{`
+                .animation-delay-200 {
+                    animation-delay: 0.2s;
+                }
+                .animation-delay-400 {
+                    animation-delay: 0.4s;
+                }
+                .markdown-content ul, .markdown-content ol {
+                    margin-top: 0.5rem;
+                    margin-bottom: 0.5rem;
+                    padding-left: 1.5rem;
+                }
+                .markdown-content li {
+                    margin-bottom: 0.25rem;
+                }
+                .markdown-content p {
+                    margin-bottom: 0.75rem;
+                }
+                .markdown-content p:last-child {
+                    margin-bottom: 0;
+                }
+            `}</style>
         </div>
     );
 };

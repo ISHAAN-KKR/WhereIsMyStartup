@@ -1,64 +1,77 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { ShoppingCart, DollarSign, Wallet, PiggyBank, User, BarChart3, LogOut, Search, X, BookText } from "lucide-react";
-import { SignOutButton, useUser } from "@clerk/nextjs";
-import Reveal from "../../../_components/Reveal";
-// import Growth from "../../_components/Growth";
+"use client"
+import { useState, useEffect } from "react"
+import {
+  ShoppingCart,
+  DollarSign,
+  Wallet,
+  PiggyBank,
+  User,
+  BarChart3,
+  LogOut,
+  Search,
+  X,
+  BookText,
+  TrendingUp,
+  Shield,
+  Target,
+  ChevronRight,
+  Download,
+  FileText,
+  Sparkles,
+} from "lucide-react"
+import { SignOutButton, useUser } from "@clerk/nextjs"
+import Reveal from "../../../_components/Reveal"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const SkeletonLoader = () => (
-  <div className="animate-pulse p-6 bg-gray-900 min-h-screen">
-    <div className="h-12 w-60 bg-gray-700 rounded mb-6"></div>
+  <div className="animate-pulse p-6 bg-gradient-to-br from-primary-1500 to-primary-1400 min-h-screen">
+    <div className="h-12 w-60 bg-primary-1200 rounded-xl mb-8"></div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {Array(4).fill(0).map((_, i) => (
-        <div key={i} className="p-6 flex items-center justify-between bg-gray-800 rounded-lg shadow-md">
-          <div>
-            <div className="h-6 w-40 bg-gray-700 rounded mb-2"></div>
-            <div className="h-8 w-28 bg-gray-600 rounded"></div>
+      {Array(4)
+        .fill(0)
+        .map((_, i) => (
+          <div key={i} className="p-6 bg-primary-1300/50 backdrop-blur-sm rounded-2xl border border-primary-1100/30">
+            <div className="h-6 w-40 bg-primary-1100 rounded-lg mb-3"></div>
+            <div className="h-8 w-28 bg-primary-1000 rounded-lg"></div>
           </div>
-          <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
-        </div>
-      ))}
+        ))}
     </div>
-    <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
-      <div className="h-12 w-48 bg-gray-700 rounded"></div>
-      <div className="h-12 w-48 bg-gray-700 rounded"></div>
-    </div>
-    <div className="h-12 w-48 bg-gray-700 rounded mt-6"></div>
-    <div className="h-80 bg-gray-800 rounded-lg mt-8"></div>
   </div>
-);
+)
 
 const NoDataFound = () => (
-  <div className="p-6 bg-gray-900 min-h-screen text-white flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-lime-400">No Data Found</h2>
-      <p className="mt-2 text-gray-400">Please log in to view your financial data.</p>
+  <div className="p-6 bg-gradient-to-br from-primary-1500 to-primary-1400 min-h-screen text-white flex items-center justify-center">
+    <div className="text-center bg-primary-1300/30 backdrop-blur-sm p-12 rounded-3xl border border-primary-1100/30">
+      <div className="w-20 h-20 bg-primary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+        <Shield className="w-10 h-10 text-white" />
+      </div>
+      <h2 className="text-3xl font-bold text-primary-200 mb-4">No Data Found</h2>
+      <p className="text-primary-400 mb-8 text-lg">Please log in to view your financial dashboard.</p>
       <a href="/sign-in">
-        <button className="mt-4 bg-lime-500 text-white px-6 py-3 rounded-lg hover:bg-lime-600">
+        <button className="bg-gradient-to-r from-primary-500 to-brand-500 text-white px-8 py-4 rounded-xl hover:from-primary-600 hover:to-brand-600 transition-all duration-300 font-semibold text-lg shadow-lg shadow-primary-glow">
           Log In
         </button>
       </a>
     </div>
   </div>
-);
+)
 
 const Page = () => {
-  const { user, isLoaded } = useUser();
-  const [userData, setUserData] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [prompt, setPrompt] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
+  const { user, isLoaded } = useUser()
+  const [userData, setUserData] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [prompt, setPrompt] = useState("")
+  const [isFetching, setIsFetching] = useState(false)
 
   const generatePDF = async () => {
     if (!user) {
-      alert("User not authenticated");
-      return;
+      alert("User not authenticated")
+      return
     }
 
-    const mail = user.emailAddresses[0]?.emailAddress;
-    const uname = user.firstName;
+    const mail = user.emailAddresses[0]?.emailAddress
+    const uname = user.firstName
 
     try {
       const response = await fetch(`${API_URL}/pdfGenerator`, {
@@ -79,11 +92,11 @@ Your role is to generate structured and professional financial reports based on 
 
 ---
 
-# 📊 Business Financial Report  
+# Business Financial Report  
 
 ---
 
-## 1️⃣ Financial Overview  
+## Financial Overview  
 
 | Metric              | Value ($) |
 |---------------------|-----------|
@@ -94,239 +107,339 @@ Your role is to generate structured and professional financial reports based on 
 
 ---
 
-## 2️⃣ Cost Optimization Strategies  
-- 🔹 Identify areas where expenses can be reduced without affecting productivity  
-- 🔹 Automate routine financial processes to reduce operational costs  
-- 🔹 Negotiate better deals with vendors to lower fixed expenses  
+## Cost Optimization Strategies  
+-  Identify areas where expenses can be reduced without affecting productivity  
+-  Automate routine financial processes to reduce operational costs  
+-  Negotiate better deals with vendors to lower fixed expenses  
 
 ---
 
-## 3️⃣ Profitability Forecast  
-- 📈 *Projected Revenue Growth:* [Trend insights]  
-- 📉 *Expense Management:* [Expense reduction insights]  
-- 💰 *Savings Potential:* [Adjusted savings potential]  
+## Profitability Forecast  
+-  *Projected Revenue Growth:* [Trend insights]  
+-  *Expense Management:* [Expense reduction insights]  
+-  *Savings Potential:* [Adjusted savings potential]  
 
 ---
 
-## 4️⃣ Risk Management Insights  
-- ⚠ *Potential Risks:* [Risk list]  
-- ✅ *Mitigation Strategies:* [Practical solutions]  
+##  Risk Management Insights  
+-  *Potential Risks:* [Risk list]  
+-  *Mitigation Strategies:* [Practical solutions]  
 
 ---
 
-## 5️⃣ Actionable Recommendations  
+##  Actionable Recommendations  
 ✔ Optimize cash flow by balancing revenue & expenses  
 ✔ Invest strategically in growth areas  
 ✔ Maintain emergency savings for unforeseen challenges  
 
 ---
 
-## 📌 Final Notes  
+## Final Notes  
 > This report provides an *in-depth financial analysis* tailored to the user's business needs.  
 > Insights are *data-driven, designed to support **cost optimization, strategic planning, and long-term stability.*  
 
 ---
 
-⚡ *End of Report* ⚡
-        `
+ *End of Report* 
+        `,
             },
             {
               role: "user",
-              content: prompt
-            }
+              content: prompt,
+            },
           ],
           uname,
         }),
-      });
+      })
 
       if (response.ok) {
-        alert("PDF generation request sent successfully!");
-        setShowModal(false);
-        setPrompt("");
+        alert("PDF generation request sent successfully!")
+        setShowModal(false)
+        setPrompt("")
       } else {
-        alert("Failed to generate PDF.");
+        alert("Failed to generate PDF.")
       }
     } catch (error) {
-      alert("Error connecting to the server.");
+      alert("Error connecting to the server.")
     }
-  };
+  }
 
   useEffect(() => {
-    if (!isLoaded || !user?.id) return;
-    fetchUserData(user.id);
-  }, [isLoaded, user?.id]);
+    if (!isLoaded || !user?.id) return
+    fetchUserData(user.id)
+  }, [isLoaded, user?.id])
 
   const fetchUserData = async (userId) => {
-    setIsFetching(true);
+    setIsFetching(true)
     try {
-      console.log("Fetching user data for UID:", userId);
+      console.log("Fetching user data for UID:", userId)
       const response = await fetch(`${API_URL}/userData`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ uid: userId }),
-      });
+      })
 
       if (!response.ok) {
-        console.error("Server Error:", await response.text());
-        setIsFetching(false);
-        return;
+        console.error("Server Error:", await response.text())
+        setIsFetching(false)
+        return
       }
 
-      const data = await response.json();
-      console.log("Full API Response:", data);
+      const data = await response.json()
+      console.log("Full API Response:", data)
 
       if (!data.message || data.message.length === 0) {
-        setIsFetching(false);
-        return;
+        setIsFetching(false)
+        return
       }
 
-      const financialData = data.message.filter(item => item.annual_revenue !== undefined);
+      const financialData = data.message.filter((item) => item.annual_revenue !== undefined)
       if (financialData.length === 0) {
-        setIsFetching(false);
-        return;
+        setIsFetching(false)
+        return
       }
 
-      const latestFinancialData = financialData[financialData.length - 1];
-      setUserData(latestFinancialData);
-      setIsFetching(false);
+      const latestFinancialData = financialData[financialData.length - 1]
+      setUserData(latestFinancialData)
+      setIsFetching(false)
     } catch (error) {
-      console.error("Error fetching user details:", error);
-      setIsFetching(false);
+      console.error("Error fetching user details:", error)
+      setIsFetching(false)
     }
-  };
+  }
 
-  if (!isLoaded || isFetching) return <SkeletonLoader />;
-  if (!user || !userData) return <NoDataFound />;
+  if (!isLoaded || isFetching) return <SkeletonLoader />
+  if (!user || !userData) return <NoDataFound />
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-white">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">
-          Hi <span className="capitalize text-lime-400">{user?.username || "Guest"}</span>!
-        </h1>
-        <SignOutButton>
-          <button className="flex items-center bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700">
-            <LogOut className="mr-2" /> Logout
-          </button>
-        </SignOutButton>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-[20px]">
-        {[
-          { title: "Annual Revenue", value: `₹${userData?.annual_revenue ?? "0"}`, icon: DollarSign },
-          { title: "Monthly Budget", value: `₹${userData?.monthly_budget ?? "0"}`, icon: Wallet },
-          { title: "Recurring Expenses", value: `₹${userData?.recurring_expenses ?? "0"}`, icon: ShoppingCart },
-          { title: "Savings", value: `₹${userData?.savings ?? "0"}`, icon: PiggyBank },
-        ].map(({ title, value, icon: Icon }, index) => (
-          <div
-            key={index}
-            className="p-4 flex items-center justify-between bg-gray-800 rounded-lg shadow-md"
-          >
-            <div>
-              <h2 className="text-lg font-semibold text-lime-500">{title}</h2>
-              <Reveal>
-                <p className="text-2xl font-bold">{value}</p>
-              </Reveal>
-            </div>
-            <Icon className="w-10 h-10 text-lime-600" />
+    <div className="min-h-screen bg-gradient-to-br from-primary-1500 via-primary-1400 to-primary-1300">
+      <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div className="flex-1 ml-12">
+            <h1 className="text-2xl lg:text-3xl font-bold text-white mb-1">
+              Welcome back,{" "}
+              <span className="text-transparent bg-gradient-to-r from-primary-300 to-brand-400 bg-clip-text">
+                {user?.username || "Guest"}
+              </span>
+              !
+            </h1>
+            <p className="text-primary-400 text-base">Here's your financial overview</p>
           </div>
-        ))}
-      </div>
+          <SignOutButton>
+            <button className="flex items-center bg-gradient-to-r from-red-500/90 to-red-600/90 px-4 py-2.5 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 text-white font-medium text-sm shadow-sm hover:shadow-md">
+              <LogOut className="mr-2 w-4 h-4" /> Logout
+            </button>
+          </SignOutButton>
+        </div>
 
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
-        <a href="/UpdateProfile">
-          <button className="flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-            <User className="mr-2" /> Update Profile
-          </button>
-        </a>
-        <a href="/grow/Analytics">
-          <button className="flex items-center bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700">
-            <BarChart3 className="mr-2" /> See Analytics
-          </button>
-        </a>
-      </div>
-
-      <div className="flex items-center justify-center max-w-[400px] md:w-[800px] h-[40px] mx-auto mt-8">
-        <a href="/grow/Chanakya">
-          <button className="bg-white text-center w-[400px] md:w-[800px] rounded-2xl h-14 text-black text-xl font-semibold group relative">
-            <div className="bg-lime-500 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[392px] md:group-hover:w-[792px] z-10 duration-500">
-              <Search className="text-white" />
-            </div>
-            <p className="translate-x-2">Ask Chanakya</p>
-          </button>
-        </a>
-      </div>
-
-      {/* Cost Planner */}
-      <div className="py-6 sm:py-8 lg:py-12 my-2">
-        <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-          <div className="flex flex-col overflow-hidden rounded-lg bg-gray-900 sm:flex-row md:h-80 border-2 border-gray-200">
-            {/* Content */}
-            <div className="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-2/5">
-              <h2 className="mb-4 text-xl font-bold text-white md:text-2xl lg:text-4xl">
-                Business Cost <span className="text-lime-300">Planner</span>
-              </h2>
-              <p className="mb-8 max-w-md text-gray-400">
-                Describe your business vision and goals in a few sentences
-              </p>
-              <div className="mt-auto">
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="flex w-[200px] md:w-[400px] rounded-lg bg-white px-8 py-3 text-center text-sm font-semibold text-gray-800 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:text-base"
-                >
-                  <BookText /> <span className="font-bold text-lg ml-2">Generate</span>
-                </button>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          {[
+            {
+              title: "Annual Revenue",
+              value: `₹${userData?.annual_revenue ?? "0"}`,
+              icon: DollarSign,
+              gradient: "from-emerald-500 to-emerald-600",
+              bgGradient: "from-emerald-500/10 to-emerald-600/5",
+              trend: "+12.5%",
+            },
+            {
+              title: "Monthly Budget",
+              value: `₹${userData?.monthly_budget ?? "0"}`,
+              icon: Wallet,
+              gradient: "from-primary-500 to-brand-500",
+              bgGradient: "from-primary-500/10 to-brand-500/5",
+              trend: "+5.2%",
+            },
+            {
+              title: "Recurring Expenses",
+              value: `₹${userData?.recurring_expenses ?? "0"}`,
+              icon: ShoppingCart,
+              gradient: "from-orange-500 to-red-500",
+              bgGradient: "from-orange-500/10 to-red-500/5",
+              trend: "-3.1%",
+            },
+            {
+              title: "Savings",
+              value: `₹${userData?.savings ?? "0"}`,
+              icon: PiggyBank,
+              gradient: "from-purple-500 to-pink-500",
+              bgGradient: "from-purple-500/10 to-pink-500/5",
+              trend: "+8.7%",
+            },
+          ].map(({ title, value, icon: Icon, gradient, bgGradient, trend }, index) => (
+            <div
+              key={index}
+              className={`relative p-5 bg-gradient-to-br ${bgGradient} backdrop-blur-sm rounded-2xl border border-primary-1100/20 hover:border-primary-1000/40 transition-all duration-300 group overflow-hidden shadow-sm hover:shadow-lg`}
+            >
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-2.5 rounded-xl bg-gradient-to-r ${gradient} shadow-md`}>
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-xs font-medium bg-primary-1200/40 px-2 py-1 rounded-lg text-primary-200">
+                    {trend}
+                  </span>
+                </div>
+                <h3 className="text-primary-300 font-medium mb-2 text-sm">{title}</h3>
+                <Reveal>
+                  <p className="text-2xl lg:text-2xl font-bold text-white mb-1">{value}</p>
+                </Reveal>
+                <div className="h-1 w-full bg-primary-1200/30 rounded-full mt-3">
+                  <div 
+                    className={`h-full rounded-full bg-gradient-to-r ${gradient}`}
+                    style={{ width: `${Math.min(100, parseInt(value.replace('₹', '')) / 5000 * 100)}%` }}
+                  ></div>
+                </div>
               </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -skew-x-12"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
+          <a href="/UpdateProfile" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3.5 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium shadow-sm hover:shadow-md text-sm">
+              <User className="mr-2 w-4 h-4" /> Update Profile
+            </button>
+          </a>
+          <a href="/grow/Analytics" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3.5 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium shadow-sm hover:shadow-md text-sm">
+              <BarChart3 className="mr-2 w-4 h-4" /> See Analytics
+            </button>
+          </a>
+        </div>
+
+        {/* AI Assistant Search */}
+        <div className="flex items-center justify-center mb-8">
+          <a href="/grow/Chanakya" className="w-full max-w-2xl">
+            <div className="relative w-full bg-gradient-to-r from-primary-100 to-primary-50 rounded-2xl h-14 text-primary-1400 text-lg font-semibold group overflow-hidden shadow-sm hover:shadow-lg border border-primary-200/50 transition-all duration-300 hover:-translate-y-0.5">
+              <div className="absolute left-1 top-1 bottom-1 bg-gradient-to-r from-primary-500 to-brand-500 rounded-xl flex items-center justify-center w-12 group-hover:w-14 transition-all duration-500 ease-out">
+                <Search className="text-white w-5 h-5" />
+              </div>
+              <div className="flex items-center justify-center h-full pl-14 pr-4">
+                <Target className="mr-3 w-5 h-5 text-primary-600" />
+                <span className="flex-1">Ask Chanakya AI Assistant</span>
+                <ChevronRight className="w-5 h-5 text-primary-800 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          </a>
+        </div>
+
+        {/* Report Generator Card */}
+        <div className="bg-gradient-to-r from-primary-1300/40 to-primary-1200/20 backdrop-blur-sm rounded-3xl border border-primary-1100/20 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 mb-8">
+          <div className="flex flex-col lg:flex-row">
+            {/* Content */}
+            <div className="flex-1 p-6 lg:p-8">
+              <div className="flex items-start mb-6">
+                <div className="bg-gradient-to-r from-primary-500 to-brand-500 p-3 rounded-xl mr-4 shadow-md">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+                    Business Cost{" "}
+                    <span className="text-transparent bg-gradient-to-r from-primary-300 to-brand-400 bg-clip-text">
+                      Planner
+                    </span>
+                  </h2>
+                  <p className="text-primary-300 text-base leading-relaxed max-w-md">
+                    Generate comprehensive financial reports with AI-powered insights tailored to your business goals
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center bg-gradient-to-r from-primary-500 to-brand-500 text-white px-6 py-3.5 rounded-xl hover:from-primary-600 hover:to-brand-600 transition-all duration-300 font-medium shadow-md hover:shadow-lg group"
+              >
+                <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                <span>Generate Report</span>
+              </button>
             </div>
 
             {/* Image */}
-            <div className="order-first h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-3/5">
-              <img
-                src="/header.gif"
-                loading="lazy"
-                alt="Photo by Dom Hill"
-                className="h-full w-full object-cover object-center"
-              />
+            <div className="lg:w-2/5 h-64 lg:h-auto flex items-center justify-center p-4">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden border border-primary-1100/30 shadow-inner">
+                <img
+                  src="/header.gif"
+                  loading="lazy"
+                  alt="Business Analytics Visualization"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-1300/10 to-primary-1200/5"></div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* Quick Tips Section */}
+        <div className="bg-gradient-to-r from-primary-1300/30 to-primary-1200/10 backdrop-blur-sm rounded-3xl border border-primary-1100/20 p-6 mb-8">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+            <Target className="w-5 h-5 mr-2 text-brand-400" />
+            Financial Tips
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              "Review expenses weekly to identify savings opportunities",
+              "Set aside 10-15% of revenue for emergency funds",
+              "Consider automating recurring payments to avoid late fees"
+            ].map((tip, index) => (
+              <div key={index} className="bg-primary-1200/20 p-4 rounded-xl border border-primary-1100/20">
+                <p className="text-primary-300 text-sm">{tip}</p>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-gray-900 p-6 rounded-lg shadow-lg md:w-[600px] w-96">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-bold text-white">What do you want to know?</h2>
-                <button onClick={() => setShowModal(false)}>
-                  <X className="text-white w-6 h-6" />
+          <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4">
+            <div className="bg-gradient-to-br from-primary-1300 to-primary-1400 p-6 rounded-2xl shadow-2xl border border-primary-1100/30 w-full max-w-lg">
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="text-xl font-bold text-white flex items-center">
+                  <Download className="w-5 h-5 mr-2 text-brand-400" />
+                  Generate Financial Report
+                </h2>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="p-2 hover:bg-primary-1200/50 rounded-lg transition-colors"
+                >
+                  <X className="text-primary-300 w-5 h-5" />
                 </button>
               </div>
 
-              <input
-                type="text"
-                placeholder="Type your question..."
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="mt-4 w-full p-2 bg-gray-800 text-white rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500"
-              />
+              <div className="mb-5">
+                <label className="block text-primary-300 font-medium mb-2 text-sm">
+                  Describe your business question or goal:
+                </label>
+                <textarea
+                  placeholder="e.g., How can I optimize my monthly expenses while maintaining growth targets?"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  rows={4}
+                  className="w-full p-3 bg-primary-1200/50 text-white rounded-xl border border-primary-1100/30 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-primary-500 resize-none text-sm"
+                />
+              </div>
 
               <button
                 onClick={generatePDF}
-                className={`mt-4 w-full p-2 rounded-lg ${
+                className={`w-full p-3.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center ${
                   prompt.trim() === ""
-                    ? "bg-gray-600 cursor-not-allowed"
-                    : "bg-lime-500 hover:bg-lime-600"
-                } text-white`}
+                    ? "bg-primary-1100/50 text-primary-600 cursor-not-allowed"
+                    : "bg-gradient-to-r from-primary-500 to-brand-500 text-white hover:from-primary-600 hover:to-brand-600 shadow-md hover:shadow-lg"
+                }`}
                 disabled={prompt.trim() === ""}
               >
-                Send
+                <FileText className="w-5 h-5 mr-2" />
+                Generate Financial Report
               </button>
             </div>
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
