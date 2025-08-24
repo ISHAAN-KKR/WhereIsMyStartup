@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Users, TrendingUp, Calendar, Clock, Briefcase } from 'lucide-react';
+import { Search, Users, TrendingUp, Calendar, Clock, Briefcase, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const BuildPage = () => {
   const [activeTab, setActiveTab] = useState('market-research');
@@ -21,6 +21,8 @@ const BuildPage = () => {
     email: '',
     pitch_summary: ''
   });
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+  const newsRef = useRef(null);
 
   useEffect(() => {
     loadNews();
@@ -31,6 +33,17 @@ const BuildPage = () => {
       loadVCs();
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    // Auto-scroll news carousel
+    const interval = setInterval(() => {
+      if (news.length > 0) {
+        setCurrentNewsIndex((prevIndex) => (prevIndex + 1) % news.length);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [news]);
 
   const loadNews = async () => {
     try {
@@ -171,21 +184,29 @@ const BuildPage = () => {
     return availableSlots;
   };
 
+  const handleNewsNavigation = (direction) => {
+    if (direction === 'next') {
+      setCurrentNewsIndex((prevIndex) => (prevIndex + 1) % news.length);
+    } else {
+      setCurrentNewsIndex((prevIndex) => (prevIndex - 1 + news.length) % news.length);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-primary-1300 font-sans text-primary-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Toggle Buttons */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-primary-1100 rounded-xl shadow-md border border-primary-900 overflow-hidden">
+          <div className="inline-flex bg-primary-1100 rounded-full shadow-md border border-primary-900 overflow-hidden p-1">
             <motion.button
               onClick={() => setActiveTab('market-research')}
               className={`px-8 py-3 font-medium transition-all duration-200 flex items-center space-x-2 ${
                 activeTab === 'market-research'
-                  ? 'bg-primary-500 text-white'
+                  ? 'bg-primary-500 text-white shadow-lg'
                   : 'text-primary-50 hover:bg-primary-1000'
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              } rounded-l-full rounded-r-md`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               <TrendingUp className="h-5 w-5" />
               <span>Market Research</span>
@@ -194,11 +215,11 @@ const BuildPage = () => {
               onClick={() => setActiveTab('venture-capitalists')}
               className={`px-8 py-3 font-medium transition-all duration-200 flex items-center space-x-2 ${
                 activeTab === 'venture-capitalists'
-                  ? 'bg-primary-500 text-white'
+                  ? 'bg-primary-500 text-white shadow-lg'
                   : 'text-primary-50 hover:bg-primary-1000'
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              } rounded-r-full rounded-l-md`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               <Users className="h-5 w-5" />
               <span>Venture Capitalists</span>
@@ -260,33 +281,58 @@ const BuildPage = () => {
                 </motion.div>
               ) : (
                 <div className="max-w-4xl mx-auto">
-                  <h3 className="text-xl font-semibold text-primary-50 mb-6">Latest Startup News</h3>
-                  <div className="relative h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-primary-900 scrollbar-track-primary-1200">
-                    <motion.div
-                      className="space-y-4"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
+                  <h3 className="text-xl font-semibold text-primary-50 mb-6 flex items-center justify-between">
+                    <span>Latest Startup News</span>
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => handleNewsNavigation('prev')}
+                        className="p-1 rounded-full bg-primary-1000 hover:bg-primary-900 transition-colors"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+                      <button 
+                        onClick={() => handleNewsNavigation('next')}
+                        className="p-1 rounded-full bg-primary-1000 hover:bg-primary-900 transition-colors"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </h3>
+                  <div className="relative h-64 overflow-hidden rounded-xl bg-primary-1100 shadow-lg">
+                    <motion.div 
+                      className="absolute inset-0"
+                      key={currentNewsIndex}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.5 }}
                     >
-                      {news.map((article) => (
-                        <motion.div
-                          key={article.id}
-                          className="bg-primary-1100 rounded-xl shadow-md p-6"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
+                      {news.length > 0 && (
+                        <div className="p-6 h-full flex flex-col justify-center">
                           <div className="flex items-center justify-between mb-3">
                             <span className="bg-primary-900 text-primary-50 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                              {article.category}
+                              {news[currentNewsIndex].category}
                             </span>
-                            <span className="text-primary-400 text-sm">{article.time}</span>
+                            <span className="text-primary-400 text-sm">{news[currentNewsIndex].time}</span>
                           </div>
-                          <h4 className="text-lg font-semibold text-primary-50 mb-2">{article.title}</h4>
-                          <p className="text-primary-200 mb-3">{article.summary}</p>
-                          <p className="text-sm text-primary-400">Source: {article.source}</p>
-                        </motion.div>
-                      ))}
+                          <h4 className="text-lg font-semibold text-primary-50 mb-2">{news[currentNewsIndex].title}</h4>
+                          <p className="text-primary-200 mb-3">{news[currentNewsIndex].summary}</p>
+                          <p className="text-sm text-primary-400">Source: {news[currentNewsIndex].source}</p>
+                          
+                          {/* Indicator dots */}
+                          <div className="flex justify-center mt-6 space-x-2">
+                            {news.map((_, index) => (
+                              <button
+                                key={index}
+                                onClick={() => setCurrentNewsIndex(index)}
+                                className={`w-2 h-2 rounded-full transition-all ${
+                                  index === currentNewsIndex ? 'bg-primary-500 scale-125' : 'bg-primary-700'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </motion.div>
                   </div>
                 </div>
@@ -321,7 +367,7 @@ const BuildPage = () => {
                         <motion.div
                           key={vc.id}
                           onClick={() => handleVcClick(vc.id)}
-                          className="bg-primary-1100 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer p-6"
+                          className="bg-primary-1100 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer p-6 border border-primary-1000 hover:border-primary-700"
                           whileHover={{ scale: 1.02, boxShadow: '0 0 15px var(--color-primary-glow)' }}
                         >
                           <div className="flex items-center space-x-4 mb-4">

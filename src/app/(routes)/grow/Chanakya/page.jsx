@@ -199,7 +199,7 @@ If it's just a greeting in the next prompt, then just greet them, nothing else.
                                             <img 
                                                 src="/chanakya.jpeg"  
                                                 alt="Chanakya" 
-                                                className="w-7 h-7 object-contain"
+                                                className="w-7 h-7 object-contain rounded-full"
                                             />
                                         </div>
                                         <div className="bg-primary-1300/50 backdrop-blur-sm border border-primary-1100/30 text-gray-300 rounded-2xl px-4 py-3">
@@ -227,7 +227,7 @@ If it's just a greeting in the next prompt, then just greet them, nothing else.
                                         <img 
                                             src="/chanakya.jpeg" 
                                             alt="Chanakya" 
-                                            className="w-12 h-12 object-contain"
+                                            className="w-12 h-12 object-contain rounded-full"
                                         />
                                     </div>
                                     <h2 className="text-2xl font-bold text-white mb-2">Welcome to Chanakya AI</h2>
@@ -261,11 +261,11 @@ If it's just a greeting in the next prompt, then just greet them, nothing else.
                                     </div>
                                 </div>
                             </div>
-                            
+{/*                             
                             <div className="mt-8 flex items-center text-xs text-primary-400">
                                 <Target className="w-3 h-3 mr-1" />
                                 <span>Powered by advanced financial AI • Professional consultation</span>
-                            </div>
+                            </div> */}
                         </div>
                     )}
                 </div>
@@ -297,10 +297,10 @@ If it's just a greeting in the next prompt, then just greet them, nothing else.
                             )}
                         </button>
                     </div>
-                    <div className="mt-3 text-xs text-primary-400 text-center flex items-center justify-center">
+                    {/* <div className="mt-3 text-xs text-primary-400 text-center flex items-center justify-center">
                         <BookOpen className="w-3 h-3 mr-1" />
                         <span>Professional business consultation • Powered by AI</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             

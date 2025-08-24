@@ -18,10 +18,11 @@ import {
   Download,
   FileText,
   Sparkles,
+  Building2,
 } from "lucide-react"
 import { SignOutButton, useUser } from "@clerk/nextjs"
 import Reveal from "../../../_components/Reveal"
-
+import Grid from '../../../_components/grid'
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const SkeletonLoader = () => (
@@ -60,6 +61,7 @@ const NoDataFound = () => (
 const Page = () => {
   const { user, isLoaded } = useUser()
   const [userData, setUserData] = useState(null)
+  const [industry, setIndustry] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [prompt, setPrompt] = useState("")
   const [isFetching, setIsFetching] = useState(false)
@@ -194,6 +196,7 @@ Your role is to generate structured and professional financial reports based on 
       }
 
       const financialData = data.message.filter((item) => item.annual_revenue !== undefined)
+      const industryData = data.message.find((item) => item.industry !== undefined)
       if (financialData.length === 0) {
         setIsFetching(false)
         return
@@ -201,6 +204,7 @@ Your role is to generate structured and professional financial reports based on 
 
       const latestFinancialData = financialData[financialData.length - 1]
       setUserData(latestFinancialData)
+      setIndustry(industryData?.industry || "Not Specified")
       setIsFetching(false)
     } catch (error) {
       console.error("Error fetching user details:", error)
@@ -210,31 +214,37 @@ Your role is to generate structured and professional financial reports based on 
 
   if (!isLoaded || isFetching) return <SkeletonLoader />
   if (!user || !userData) return <NoDataFound />
-  console.log(userData)
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-1500 via-primary-1400 to-primary-1300">
-      <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+      <div className="p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <div className="flex-1 ml-12">
-            <h1 className="text-2xl lg:text-3xl font-bold text-white mb-1">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+          <div className="flex-1">
+            <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">
               Welcome back,{" "}
               <span className="text-transparent bg-gradient-to-r from-primary-300 to-brand-400 bg-clip-text">
                 {user?.username || "Guest"}
               </span>
               !
             </h1>
-            <p className="text-primary-400 text-base">Here's your financial overview</p>
+            <div className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-primary-300" />
+              <p className="text-primary-300 text-lg font-medium">
+                Industry: <span className="text-primary-100 font-semibold">{industry}</span>
+              </p>
+            </div>
+            <p className="text-primary-400 text-base mt-1">Your financial dashboard at a glance</p>
           </div>
           <SignOutButton>
-            <button className="flex items-center bg-gradient-to-r from-red-500/90 to-red-600/90 px-4 py-2.5 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 text-white font-medium text-sm shadow-sm hover:shadow-md">
-              <LogOut className="mr-2 w-4 h-4" /> Logout
+            <button className="flex items-center bg-gradient-to-r from-red-500/90 to-red-600/90 px-5 py-3 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 text-white font-medium shadow-sm hover:shadow-md">
+              <LogOut className="mr-2 w-5 h-5" /> Sign Out
             </button>
           </SignOutButton>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {[
             {
               title: "Annual Revenue",
@@ -271,22 +281,22 @@ Your role is to generate structured and professional financial reports based on 
           ].map(({ title, value, icon: Icon, gradient, bgGradient, trend }, index) => (
             <div
               key={index}
-              className={`relative p-5 bg-gradient-to-br ${bgGradient} backdrop-blur-sm rounded-2xl border border-primary-1100/20 hover:border-primary-1000/40 transition-all duration-300 group overflow-hidden shadow-sm hover:shadow-lg`}
+              className={`relative p-6 bg-gradient-to-br ${bgGradient} backdrop-blur-md rounded-2xl border border-primary-1100/20 hover:border-primary-1000/40 transition-all duration-300 group overflow-hidden shadow-md hover:shadow-xl`}
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`p-2.5 rounded-xl bg-gradient-to-r ${gradient} shadow-md`}>
-                    <Icon className="w-5 h-5 text-white" />
+                  <div className={`p-3 rounded-xl bg-gradient-to-r ${gradient} shadow-lg`}>
+                    <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-xs font-medium bg-primary-1200/40 px-2 py-1 rounded-lg text-primary-200">
+                  <span className="text-sm font-semibold bg-primary-1200/50 px-3 py-1.5 rounded-lg text-primary-100">
                     {trend}
                   </span>
                 </div>
-                <h3 className="text-primary-300 font-medium mb-2 text-sm">{title}</h3>
+                <h3 className="text-primary-200 font-semibold mb-2 text-base">{title}</h3>
                 <Reveal>
-                  <p className="text-2xl lg:text-2xl font-bold text-white mb-1">{value}</p>
+                  <p className="text-3xl font-bold text-white mb-3">{value}</p>
                 </Reveal>
-                <div className="h-1 w-full bg-primary-1200/30 rounded-full mt-3">
+                <div className="h-2 w-full bg-primary-1200/30 rounded-full">
                   <div 
                     className={`h-full rounded-full bg-gradient-to-r ${gradient}`}
                     style={{ width: `${Math.min(100, parseInt(value.replace('₹', '')) / 5000 * 100)}%` }}
@@ -299,67 +309,66 @@ Your role is to generate structured and professional financial reports based on 
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-10">
           <a href="/UpdateProfile" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3.5 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-medium shadow-sm hover:shadow-md text-sm">
-              <User className="mr-2 w-4 h-4" /> Update Profile
+            <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-semibold shadow-md hover:shadow-lg text-base">
+              <User className="mr-2 w-5 h-5" /> Update Profile
             </button>
           </a>
           <a href="/grow/Analytics" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3.5 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium shadow-sm hover:shadow-md text-sm">
-              <BarChart3 className="mr-2 w-4 h-4" /> See Analytics
+            <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-semibold shadow-md hover:shadow-lg text-base">
+              <BarChart3 className="mr-2 w-5 h-5" /> View Analytics
             </button>
           </a>
         </div>
 
         {/* AI Assistant Search */}
-        <div className="flex items-center justify-center mb-8">
-          <a href="/grow/Chanakya" className="w-full max-w-2xl">
-            <div className="relative w-full bg-gradient-to-r from-primary-100 to-primary-50 rounded-2xl h-14 text-primary-1400 text-lg font-semibold group overflow-hidden shadow-sm hover:shadow-lg border border-primary-200/50 transition-all duration-300 hover:-translate-y-0.5">
-              <div className="absolute left-1 top-1 bottom-1 bg-gradient-to-r from-primary-500 to-brand-500 rounded-xl flex items-center justify-center w-12 group-hover:w-14 transition-all duration-500 ease-out">
-                <Search className="text-white w-5 h-5" />
+        <div className="flex items-center justify-center mb-10">
+          <a href="/grow/Chanakya" className="w-full max-w-3xl">
+            <div className="relative w-full bg-gradient-to-r from-primary-100 to-primary-50 rounded-xl h-16 text-primary-1400 text-lg font-semibold group overflow-hidden shadow-md hover:shadow-xl border border-primary-200/50 transition-all duration-300 hover:-translate-y-1">
+              <div className="absolute left-1.5 top-1.5 bottom-1.5 bg-gradient-to-r from-primary-500 to-brand-500 rounded-lg flex items-center justify-center w-14 group-hover:w-16 transition-all duration-500 ease-out">
+                <Search className="text-white w-6 h-6" />
               </div>
-              <div className="flex items-center justify-center h-full pl-14 pr-4">
-                <Target className="mr-3 w-5 h-5 text-primary-600" />
-                <span className="flex-1">Ask Chanakya AI Assistant</span>
-                <ChevronRight className="w-5 h-5 text-primary-800 group-hover:translate-x-1 transition-transform" />
+              <div className="flex items-center justify-center h-full pl-16 pr-6">
+                <Target className="mr-3 w-6 h-6 text-primary-600" />
+                <span className="flex-1 text-lg">Ask Chanakya AI Assistant</span>
+                <ChevronRight className="w-6 h-6 text-primary-800 group-hover:translate-x-1.5 transition-transform duration-300" />
               </div>
             </div>
           </a>
         </div>
-
+          <Grid/>
         {/* Report Generator Card */}
-        <div className="bg-gradient-to-r from-primary-1300/40 to-primary-1200/20 backdrop-blur-sm rounded-3xl border border-primary-1100/20 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 mb-8">
+        <div className="bg-gradient-to-r from-primary-1300/50 to-primary-1200/30 backdrop-blur-md rounded-3xl border border-primary-1100/20 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 mb-10">
           <div className="flex flex-col lg:flex-row">
             {/* Content */}
-            <div className="flex-1 p-6 lg:p-8">
+            <div className="flex-1 p-8 lg:p-10">
               <div className="flex items-start mb-6">
-                <div className="bg-gradient-to-r from-primary-500 to-brand-500 p-3 rounded-xl mr-4 shadow-md">
-                  <FileText className="w-6 h-6 text-white" />
+                <div className="bg-gradient-to-r from-primary-500 to-brand-500 p-4 rounded-xl mr-4 shadow-lg">
+                  <FileText className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white mb-2">
                     Business Cost{" "}
                     <span className="text-transparent bg-gradient-to-r from-primary-300 to-brand-400 bg-clip-text">
                       Planner
                     </span>
                   </h2>
-                  <p className="text-primary-300 text-base leading-relaxed max-w-md">
-                    Generate comprehensive financial reports with AI-powered insights tailored to your business goals
+                  <p className="text-primary-300 text-lg leading-relaxed max-w-lg">
+                    Generate AI-driven financial reports with tailored insights for your {industry.toLowerCase()} business
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center bg-gradient-to-r from-primary-500 to-brand-500 text-white px-6 py-3.5 rounded-xl hover:from-primary-600 hover:to-brand-600 transition-all duration-300 font-medium shadow-md hover:shadow-lg group"
+                className="flex items-center bg-gradient-to-r from-primary-500 to-brand-500 text-white px-8 py-4 rounded-xl hover:from-primary-600 hover:to-brand-600 transition-all duration-300 font-semibold shadow-md hover:shadow-lg text-base"
               >
                 <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                <span>Generate Report</span>
+                Generate Report
               </button>
             </div>
-
             {/* Image */}
-            <div className="lg:w-2/5 h-64 lg:h-auto flex items-center justify-center p-4">
+            <div className="lg:w-2/5 h-64 lg:h-auto flex items-center justify-center p-6">
               <div className="relative w-full h-full rounded-2xl overflow-hidden border border-primary-1100/30 shadow-inner">
                 <img
                   src="/header.gif"
@@ -374,19 +383,19 @@ Your role is to generate structured and professional financial reports based on 
         </div>
 
         {/* Quick Tips Section */}
-        <div className="bg-gradient-to-r from-primary-1300/30 to-primary-1200/10 backdrop-blur-sm rounded-3xl border border-primary-1100/20 p-6 mb-8">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Target className="w-5 h-5 mr-2 text-brand-400" />
-            Financial Tips
+        <div className="bg-gradient-to-r from-primary-1300/40 to-primary-1200/20 backdrop-blur-md rounded-3xl border border-primary-1100/20 p-8 mb-10">
+          <h3 className="text-xl font-semibold text-white mb-6 flex items-center">
+            <Target className="w-6 h-6 mr-3 text-brand-400" />
+            Financial Tips for {industry}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              "Review expenses weekly to identify savings opportunities",
+              `Review ${industry.toLowerCase()} expenses weekly to identify savings opportunities`,
               "Set aside 10-15% of revenue for emergency funds",
-              "Consider automating recurring payments to avoid late fees"
+              "Automate recurring payments to streamline financial operations"
             ].map((tip, index) => (
-              <div key={index} className="bg-primary-1200/20 p-4 rounded-xl border border-primary-1100/20">
-                <p className="text-primary-300 text-sm">{tip}</p>
+              <div key={index} className="bg-primary-1200/30 p-5 rounded-xl border border-primary-1100/20 hover:border-primary-1000/30 transition-all duration-300">
+                <p className="text-primary-200 text-base">{tip}</p>
               </div>
             ))}
           </div>
@@ -394,37 +403,37 @@ Your role is to generate structured and professional financial reports based on 
 
         {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4">
-            <div className="bg-gradient-to-br from-primary-1300 to-primary-1400 p-6 rounded-2xl shadow-2xl border border-primary-1100/30 w-full max-w-lg">
-              <div className="flex justify-between items-center mb-5">
-                <h2 className="text-xl font-bold text-white flex items-center">
-                  <Download className="w-5 h-5 mr-2 text-brand-400" />
+          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-6">
+            <div className="bg-gradient-to-br from-primary-1300 to-primary-1400 p-8 rounded-2xl shadow-2xl border border-primary-1100/30 w-full max-w-md">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white flex items-center">
+                  <Download className="w-6 h-6 mr-3 text-brand-400" />
                   Generate Financial Report
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}
                   className="p-2 hover:bg-primary-1200/50 rounded-lg transition-colors"
                 >
-                  <X className="text-primary-300 w-5 h-5" />
+                  <X className="text-primary-300 w-6 h-6" />
                 </button>
               </div>
 
-              <div className="mb-5">
-                <label className="block text-primary-300 font-medium mb-2 text-sm">
+              <div className="mb-6">
+                <label className="block text-primary-200 font-semibold mb-2 text-base">
                   Describe your business question or goal:
                 </label>
                 <textarea
-                  placeholder="e.g., How can I optimize my monthly expenses while maintaining growth targets?"
+                  placeholder={`e.g., How can I optimize my ${industry.toLowerCase()} expenses while maintaining growth?`}
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  rows={4}
-                  className="w-full p-3 bg-primary-1200/50 text-white rounded-xl border border-primary-1100/30 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-primary-500 resize-none text-sm"
+                  rows={5}
+                  className="w-full p-4 bg-primary-1200/50 text-white rounded-xl border border-primary-1100/30 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-primary-500 resize-none text-base"
                 />
               </div>
 
               <button
                 onClick={generatePDF}
-                className={`w-full p-3.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center ${
+                className={`w-full p-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
                   prompt.trim() === ""
                     ? "bg-primary-1100/50 text-primary-600 cursor-not-allowed"
                     : "bg-gradient-to-r from-primary-500 to-brand-500 text-white hover:from-primary-600 hover:to-brand-600 shadow-md hover:shadow-lg"
