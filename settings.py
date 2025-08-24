@@ -5,7 +5,8 @@ from groq import Groq
 from io import BytesIO
 from dotenv import load_dotenv
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer, TableStyle
+from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from flask_mail import Mail, Message
 from flask import Flask, request, jsonify
