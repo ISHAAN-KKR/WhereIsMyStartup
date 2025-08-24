@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Search, Users, TrendingUp, Calendar, MapPin, Building2, Clock, User, Mail, Briefcase } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Users, TrendingUp, Calendar, Clock, Briefcase } from 'lucide-react';
 
 const BuildPage = () => {
   const [activeTab, setActiveTab] = useState('market-research');
@@ -21,12 +22,10 @@ const BuildPage = () => {
     pitch_summary: ''
   });
 
-  // Load news data on component mount
   useEffect(() => {
     loadNews();
   }, []);
 
-  // Load VCs when tab switches to venture capitalists
   useEffect(() => {
     if (activeTab === 'venture-capitalists') {
       loadVCs();
@@ -35,7 +34,6 @@ const BuildPage = () => {
 
   const loadNews = async () => {
     try {
-      // Simulated news data - in real app, this would come from news.json
       const newsData = [
         {
           id: 1,
@@ -79,7 +77,7 @@ const BuildPage = () => {
   const loadVCs = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/connect_vc');
+      const response = await fetch('https://tlgqpl6k-5000.inc1.devtunnels.ms/api/connect_vc');
       const data = await response.json();
       if (data.status === 'success') {
         setVcs(data.venture_capitalists);
@@ -96,7 +94,7 @@ const BuildPage = () => {
     
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/market_research', {
+      const response = await fetch('https://tlgqpl6k-5000.inc1.devtunnels.ms/api/market_research', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +116,7 @@ const BuildPage = () => {
   const handleVcClick = async (vcId) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/connect_vc/${vcId}`);
+      const response = await fetch(`https://tlgqpl6k-5000.inc1.devtunnels.ms/api/connect_vc/${vcId}`);
       const data = await response.json();
       if (data.status === 'success') {
         setSelectedVc(data.venture_capitalist);
@@ -133,7 +131,7 @@ const BuildPage = () => {
   const handleScheduleMeeting = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/connect_vc/${selectedVc.id}/schedule`, {
+      const response = await fetch(`https://tlgqpl6k-5000.inc1.devtunnels.ms/api/connect_vc/${selectedVc.id}/schedule`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,294 +172,348 @@ const BuildPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <div className="bg-blue-600 rounded-lg p-2">
-                <Building2 className="h-6 w-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900">Build Platform</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-primary-1300 font-sans text-primary-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Toggle Buttons */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg p-1 shadow-md border">
-            <button
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex bg-primary-1100 rounded-xl shadow-md border border-primary-900 overflow-hidden">
+            <motion.button
               onClick={() => setActiveTab('market-research')}
-              className={`px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2 ${
+              className={`px-8 py-3 font-medium transition-all duration-200 flex items-center space-x-2 ${
                 activeTab === 'market-research'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'bg-primary-500 text-white'
+                  : 'text-primary-50 hover:bg-primary-1000'
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <TrendingUp className="h-4 w-4" />
+              <TrendingUp className="h-5 w-5" />
               <span>Market Research</span>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={() => setActiveTab('venture-capitalists')}
-              className={`px-6 py-3 rounded-md font-medium transition-all duration-200 flex items-center space-x-2 ${
+              className={`px-8 py-3 font-medium transition-all duration-200 flex items-center space-x-2 ${
                 activeTab === 'venture-capitalists'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'bg-primary-500 text-white'
+                  : 'text-primary-50 hover:bg-primary-1000'
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <Users className="h-4 w-4" />
+              <Users className="h-5 w-5" />
               <span>Venture Capitalists</span>
-            </button>
+            </motion.button>
           </div>
         </div>
 
         {/* Market Research Tab */}
-        {activeTab === 'market-research' && (
-          <div className="space-y-8">
-            {/* Search Bar */}
-            <div className="max-w-4xl mx-auto">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleMarketResearch()}
-                  placeholder="Enter your startup idea for comprehensive market research..."
-                  className="block w-full pl-12 pr-32 py-4 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
-                />
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-                  <button
-                    onClick={handleMarketResearch}
-                    disabled={!searchInput.trim() || loading}
-                    className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                  >
-                    {loading ? 'Analyzing...' : 'Research'}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Market Research Results or News */}
-            {marketResearchResult ? (
-              <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Market Research Results</h3>
-                <div className="prose max-w-none">
-                  <pre className="whitespace-pre-wrap text-gray-700 leading-relaxed">{marketResearchResult}</pre>
-                </div>
-              </div>
-            ) : (
+        <AnimatePresence mode="wait">
+          {activeTab === 'market-research' && (
+            <motion.div
+              key="market-research"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-12"
+            >
+              {/* Search Bar */}
               <div className="max-w-4xl mx-auto">
-                <h3 className="text-xl font-semibold text-gray-900 mb-6">Latest Startup News</h3>
-                <div className="grid gap-6 md:grid-cols-2">
-                  {news.map((article) => (
-                    <div key={article.id} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                          {article.category}
-                        </span>
-                        <span className="text-gray-500 text-sm">{article.time}</span>
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h4>
-                      <p className="text-gray-600 mb-3">{article.summary}</p>
-                      <p className="text-sm text-gray-500">Source: {article.source}</p>
-                    </div>
-                  ))}
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-primary-400" />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleMarketResearch()}
+                    placeholder="Enter your startup idea for comprehensive market research..."
+                    className="block w-full pl-12 pr-32 py-4 rounded-xl bg-primary-1100 shadow-md focus:ring-2 focus:ring-primary-300 focus:border-primary-300 text-lg text-primary-50 border border-primary-900"
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <motion.button
+                      onClick={handleMarketResearch}
+                      disabled={!searchInput.trim() || loading}
+                      className="bg-primary-500 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                      whileHover={{ scale: 1.05, boxShadow: '0 0 10px var(--color-primary-glow)' }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {loading ? 'Analyzing...' : 'Research'}
+                    </motion.button>
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
-        )}
 
-        {/* Venture Capitalists Tab */}
-        {activeTab === 'venture-capitalists' && (
-          <div className="space-y-8">
-            {!selectedVc ? (
-              <div className="max-w-6xl mx-auto">
-                <h3 className="text-xl font-semibold text-gray-900 mb-6">Connect with Top Venture Capitalists</h3>
-                {loading ? (
-                  <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  </div>
-                ) : (
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {vcs.map((vc) => (
-                      <div
-                        key={vc.id}
-                        onClick={() => handleVcClick(vc.id)}
-                        className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer group p-6"
-                      >
-                        <div className="flex items-center space-x-4 mb-4">
-                          <img
-                            src={vc.photo}
-                            alt={vc.name}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
-                          />
-                          <div>
-                            <h4 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                              {vc.name}
-                            </h4>
-                            <p className="text-gray-600 text-sm">{vc.company}</p>
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Briefcase className="h-4 w-4 mr-2" />
-                            {vc.experience}
-                          </div>
-                          <div className="flex flex-wrap gap-1">
-                            {vc.domain.map((domain, index) => (
-                              <span
-                                key={index}
-                                className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-                              >
-                                {domain}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-gray-600 text-sm mt-3 line-clamp-3">{vc.bio}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-                <button
-                  onClick={() => setSelectedVc(null)}
-                  className="text-blue-600 hover:text-blue-800 mb-6 flex items-center space-x-2"
+              {/* Market Research Results or News Vertical Carousel */}
+              {marketResearchResult ? (
+                <motion.div
+                  className="max-w-4xl mx-auto bg-primary-1100 rounded-xl shadow-lg p-8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <span>← Back to all VCs</span>
-                </button>
-                
-                <div className="flex items-start space-x-6 mb-8">
-                  <img
-                    src={selectedVc.photo}
-                    alt={selectedVc.name}
-                    className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
-                  />
-                  <div className="flex-1">
-                    <h2 className="text-3xl font-bold text-gray-900">{selectedVc.name}</h2>
-                    <p className="text-xl text-gray-600 mb-2">{selectedVc.company}</p>
-                    <div className="flex items-center text-gray-600 mb-3">
-                      <Briefcase className="h-4 w-4 mr-2" />
-                      {selectedVc.experience}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedVc.domain.map((domain, index) => (
-                        <span
-                          key={index}
-                          className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
+                  <h3 className="text-2xl font-bold text-primary-50 mb-6">Market Research Results</h3>
+                  <div className="prose max-w-none text-primary-200">
+                    <pre className="whitespace-pre-wrap leading-relaxed">{marketResearchResult}</pre>
+                  </div>
+                </motion.div>
+              ) : (
+                <div className="max-w-4xl mx-auto">
+                  <h3 className="text-xl font-semibold text-primary-50 mb-6">Latest Startup News</h3>
+                  <div className="relative h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-primary-900 scrollbar-track-primary-1200">
+                    <motion.div
+                      className="space-y-4"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {news.map((article) => (
+                        <motion.div
+                          key={article.id}
+                          className="bg-primary-1100 rounded-xl shadow-md p-6"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
                         >
-                          {domain}
-                        </span>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="bg-primary-900 text-primary-50 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                              {article.category}
+                            </span>
+                            <span className="text-primary-400 text-sm">{article.time}</span>
+                          </div>
+                          <h4 className="text-lg font-semibold text-primary-50 mb-2">{article.title}</h4>
+                          <p className="text-primary-200 mb-3">{article.summary}</p>
+                          <p className="text-sm text-primary-400">Source: {article.source}</p>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Venture Capitalists Tab */}
+          {activeTab === 'venture-capitalists' && (
+            <motion.div
+              key="venture-capitalists"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-12"
+            >
+              {!selectedVc ? (
+                <div className="max-w-6xl mx-auto">
+                  <h3 className="text-xl font-semibold text-primary-50 mb-6">Connect with Top Venture Capitalists</h3>
+                  {loading ? (
+                    <div className="flex justify-center items-center py-12">
+                      <motion.div
+                        className="h-12 w-12 border-b-2 border-primary-500 rounded-full"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                      {vcs.map((vc) => (
+                        <motion.div
+                          key={vc.id}
+                          onClick={() => handleVcClick(vc.id)}
+                          className="bg-primary-1100 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer p-6"
+                          whileHover={{ scale: 1.02, boxShadow: '0 0 15px var(--color-primary-glow)' }}
+                        >
+                          <div className="flex items-center space-x-4 mb-4">
+                            <img
+                              src={vc.photo}
+                              alt={vc.name}
+                              className="w-16 h-16 rounded-full object-cover border-2 border-primary-900"
+                            />
+                            <div>
+                              <h4 className="text-lg font-semibold text-primary-50 group-hover:text-primary-300 transition-colors">
+                                {vc.name}
+                              </h4>
+                              <p className="text-primary-200 text-sm">{vc.company}</p>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex items-center text-sm text-primary-200">
+                              <Briefcase className="h-4 w-4 mr-2" />
+                              {vc.experience}
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {vc.domain.map((domain, index) => (
+                                <span
+                                  key={index}
+                                  className="bg-primary-900 text-primary-50 text-xs px-2 py-1 rounded-full"
+                                >
+                                  {domain}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-primary-200 text-sm mt-3 line-clamp-3">{vc.bio}</p>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <motion.div
+                  className="max-w-4xl mx-auto bg-primary-1100 rounded-xl shadow-lg p-8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.button
+                    onClick={() => setSelectedVc(null)}
+                    className="text-primary-300 hover:text-primary-50 mb-6 flex items-center space-x-2"
+                    whileHover={{ x: -5 }}
+                  >
+                    <span>← Back to all VCs</span>
+                  </motion.button>
+                  
+                  <div className="flex items-start space-x-6 mb-8">
+                    <img
+                      src={selectedVc.photo}
+                      alt={selectedVc.name}
+                      className="w-24 h-24 rounded-full object-cover border-4 border-primary-900"
+                    />
+                    <div className="flex-1">
+                      <h2 className="text-3xl font-bold text-primary-50">{selectedVc.name}</h2>
+                      <p className="text-xl text-primary-200 mb-2">{selectedVc.company}</p>
+                      <div className="flex items-center text-primary-200 mb-3">
+                        <Briefcase className="h-4 w-4 mr-2" />
+                        {selectedVc.experience}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedVc.domain.map((domain, index) => (
+                          <span
+                            key={index}
+                            className="bg-primary-900 text-primary-50 text-sm px-3 py-1 rounded-full"
+                          >
+                            {domain}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mb-8">
+                    <h3 className="text-lg font-semibold text-primary-50 mb-3">Biography</h3>
+                    <p className="text-primary-200 leading-relaxed">{selectedVc.bio}</p>
+                  </div>
+
+                  <div className="mb-8">
+                    <h3 className="text-lg font-semibold text-primary-50 mb-4">Available Time Slots</h3>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {getAvailableSlots(selectedVc.schedule).map((slot, index) => (
+                        <motion.div
+                          key={index}
+                          onClick={() => {
+                            setScheduleForm({...scheduleForm, date: slot.date, time_slot: slot.time});
+                            setShowScheduleModal(true);
+                          }}
+                          className="bg-primary-1100 border-2 border-green-500 rounded-lg p-4 cursor-pointer hover:bg-primary-1000 transition-colors"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <Calendar className="h-4 w-4 text-green-500" />
+                            <span className="font-medium text-primary-50">{slot.date}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Clock className="h-4 w-4 text-green-500" />
+                            <span className="text-primary-200">{slot.time}</span>
+                          </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
-                </div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Biography</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedVc.bio}</p>
-                </div>
-
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Available Time Slots</h3>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {getAvailableSlots(selectedVc.schedule).map((slot, index) => (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          setScheduleForm({...scheduleForm, date: slot.date, time_slot: slot.time});
-                          setShowScheduleModal(true);
-                        }}
-                        className="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:bg-green-100 transition-colors"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <Calendar className="h-4 w-4 text-green-600" />
-                          <span className="font-medium text-green-800">{slot.date}</span>
-                        </div>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <Clock className="h-4 w-4 text-green-600" />
-                          <span className="text-green-700">{slot.time}</span>
-                        </div>
-                      </div>
-                    ))}
+        {/* Schedule Meeting Modal */}
+        <AnimatePresence>
+          {showScheduleModal && (
+            <motion.div
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="bg-primary-1100 rounded-xl shadow-xl p-6 w-full max-w-md"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+              >
+                <h3 className="text-lg font-semibold text-primary-50 mb-4">Schedule Meeting</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-primary-200 mb-1">Startup Name</label>
+                    <input
+                      type="text"
+                      value={scheduleForm.startup_name}
+                      onChange={(e) => setScheduleForm({...scheduleForm, startup_name: e.target.value})}
+                      className="w-full px-3 py-2 border border-primary-900 rounded-md focus:ring-2 focus:ring-primary-300 focus:border-primary-300 bg-primary-1200 text-primary-50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-primary-200 mb-1">Founder Name</label>
+                    <input
+                      type="text"
+                      value={scheduleForm.founder_name}
+                      onChange={(e) => setScheduleForm({...scheduleForm, founder_name: e.target.value})}
+                      className="w-full px-3 py-2 border border-primary-900 rounded-md focus:ring-2 focus:ring-primary-300 focus:border-primary-300 bg-primary-1200 text-primary-50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-primary-200 mb-1">Email</label>
+                    <input
+                      type="email"
+                      value={scheduleForm.email}
+                      onChange={(e) => setScheduleForm({...scheduleForm, email: e.target.value})}
+                      className="w-full px-3 py-2 border border-primary-900 rounded-md focus:ring-2 focus:ring-primary-300 focus:border-primary-300 bg-primary-1200 text-primary-50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-primary-200 mb-1">Pitch Summary</label>
+                    <textarea
+                      value={scheduleForm.pitch_summary}
+                      onChange={(e) => setScheduleForm({...scheduleForm, pitch_summary: e.target.value})}
+                      rows="3"
+                      className="w-full px-3 py-2 border border-primary-900 rounded-md focus:ring-2 focus:ring-primary-300 focus:border-primary-300 bg-primary-1200 text-primary-50"
+                    />
+                  </div>
+                  <div className="flex space-x-3 pt-4">
+                    <motion.button
+                      onClick={() => setShowScheduleModal(false)}
+                      className="flex-1 px-4 py-2 border border-primary-900 rounded-md text-primary-200 hover:bg-primary-1000"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Cancel
+                    </motion.button>
+                    <motion.button
+                      onClick={handleScheduleMeeting}
+                      disabled={loading}
+                      className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {loading ? 'Scheduling...' : 'Schedule Meeting'}
+                    </motion.button>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Schedule Meeting Modal */}
-      {showScheduleModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Schedule Meeting</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Startup Name</label>
-                <input
-                  type="text"
-                  value={scheduleForm.startup_name}
-                  onChange={(e) => setScheduleForm({...scheduleForm, startup_name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Founder Name</label>
-                <input
-                  type="text"
-                  value={scheduleForm.founder_name}
-                  onChange={(e) => setScheduleForm({...scheduleForm, founder_name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  value={scheduleForm.email}
-                  onChange={(e) => setScheduleForm({...scheduleForm, email: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Pitch Summary</label>
-                <textarea
-                  value={scheduleForm.pitch_summary}
-                  onChange={(e) => setScheduleForm({...scheduleForm, pitch_summary: e.target.value})}
-                  rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div className="flex space-x-3 pt-4">
-                <button
-                  onClick={() => setShowScheduleModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleScheduleMeeting}
-                  disabled={loading}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {loading ? 'Scheduling...' : 'Schedule Meeting'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

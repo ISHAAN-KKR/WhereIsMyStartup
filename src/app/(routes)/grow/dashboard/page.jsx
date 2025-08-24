@@ -210,7 +210,7 @@ Your role is to generate structured and professional financial reports based on 
 
   if (!isLoaded || isFetching) return <SkeletonLoader />
   if (!user || !userData) return <NoDataFound />
-
+  console.log(userData)
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-1500 via-primary-1400 to-primary-1300">
       <div className="p-4 lg:p-6 max-w-7xl mx-auto">

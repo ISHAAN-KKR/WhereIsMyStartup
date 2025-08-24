@@ -74,7 +74,7 @@ export default function RootLayout({ children }) {
                         animate={{ x: isHovered && !isOpen ? -10 : 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                        <BookOpen className="w-6 h-6" />
+                        <Building className="w-6 h-6" />
                         <AnimatePresence>
                             {isHovered && !isOpen && (
                                 <motion.span
@@ -84,7 +84,7 @@ export default function RootLayout({ children }) {
                                     exit={{ opacity: 0, width: 0 }}
                                     transition={{ duration: 0.3, ease: "easeInOut" }}
                                 >
-                                    Learn
+                                    Build
                                 </motion.span>
                             )}
                         </AnimatePresence>

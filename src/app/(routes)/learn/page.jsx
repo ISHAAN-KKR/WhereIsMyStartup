@@ -8,13 +8,13 @@ export default function ImageHoverPage() {
 
   const cards = [
     {
-      img: "/images/page1.jpg",
+      img: "/failed.jpeg",
       title: "From Dreamer to Founder",
       desc: "Learn from the journeys of dreamers who made it happen.",
       link: "/page1",
     },
     {
-      img: "/images/page2.jpg",
+      img: "/success.jpeg",
       title: "Missteps to Mindsets",
       desc: "Every failure is a classroom. Here's what dreamers before you learned the hard way",
       link: "/page2",
