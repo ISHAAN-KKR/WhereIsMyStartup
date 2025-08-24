@@ -39,6 +39,13 @@ The project is divided into three branches for modular development:
 
 ---
 
+## 📈 User Flow Diagram
+
+![WhereIsMyStartupUserFlowDiagram](https://github.com/user-attachments/assets/89461c06-2fec-45f4-84f5-4f66b81e7a0f)
+
+
+---
+
 ## 🔗 Getting Started
 
 ### 1. Clone the repository
