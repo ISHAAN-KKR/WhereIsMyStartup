@@ -19,11 +19,57 @@ import {
   FileText,
   Sparkles,
   Building2,
+  Brain,
+  Lightbulb,
+  BarChart3 as BarChartIcon,
+  CheckCircle,
 } from "lucide-react"
 import { SignOutButton, useUser } from "@clerk/nextjs"
 import Reveal from "../../../_components/Reveal"
 import Grid from '../../../_components/grid'
 const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+// Toast notification component
+const Toast = ({ message, type = "success", onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, [onClose]);
+  
+  return (
+    <div className={`fixed top-6 right-6 z-50 p-4 rounded-xl shadow-lg border backdrop-blur-md transition-all duration-300 ${
+      type === "success" 
+        ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-100" 
+        : "bg-red-500/20 border-red-500/30 text-red-100"
+    }`}>
+      <div className="flex items-center">
+        {type === "success" ? (
+          <CheckCircle className="w-5 h-5 mr-2 text-emerald-400" />
+        ) : (
+          <Shield className="w-5 h-5 mr-2 text-red-400" />
+        )}
+        <span className="font-medium">{message}</span>
+        <button 
+          onClick={onClose}
+          className="ml-4 p-1 rounded-full hover:bg-white/10 transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Thinking steps for the loading animation
+const thinkingSteps = [
+  { icon: Brain, text: "Analyzing your business data...", color: "text-blue-400" },
+  { icon: BarChartIcon, text: "Generating financial insights...", color: "text-purple-400" },
+  { icon: Lightbulb, text: "Preparing recommendations...", color: "text-yellow-400" },
+  { icon: FileText, text: "Compiling your PDF report...", color: "text-green-400" }
+];
 
 const SkeletonLoader = () => (
   <div className="animate-pulse p-6 bg-gradient-to-br from-primary-1500 to-primary-1400 min-h-screen">
@@ -65,18 +111,39 @@ const Page = () => {
   const [showModal, setShowModal] = useState(false)
   const [prompt, setPrompt] = useState("")
   const [isFetching, setIsFetching] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [thinkingStep, setThinkingStep] = useState(0)
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" })
+
+  // Show toast notification
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+  };
+
+  // Rotate through thinking steps during PDF generation
+  useEffect(() => {
+    let interval;
+    if (isGenerating) {
+      interval = setInterval(() => {
+        setThinkingStep((prev) => (prev + 1) % thinkingSteps.length);
+      }, 1500);
+    }
+    return () => clearInterval(interval);
+  }, [isGenerating]);
 
   const generatePDF = async () => {
     if (!user) {
-      alert("User not authenticated")
+      showToast("User not authenticated", "error");
       return
     }
 
     const mail = user.emailAddresses[0]?.emailAddress
     const uname = user.firstName
 
+    setIsGenerating(true);
+    
     try {
-      const response = await fetch(`${API_URL}/pdfGenerator`, {
+      const response = await fetch(`${API_URL}pdfGenerator`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -155,14 +222,16 @@ Your role is to generate structured and professional financial reports based on 
       })
 
       if (response.ok) {
-        alert("PDF generation request sent successfully!")
+        showToast("Financial planner PDF has been sent to your email!", "success");
         setShowModal(false)
         setPrompt("")
       } else {
-        alert("Failed to generate PDF.")
+        showToast("Failed to generate PDF. Please try again.", "error");
       }
     } catch (error) {
-      alert("Error connecting to the server.")
+      showToast("Error connecting to the server.", "error");
+    } finally {
+      setIsGenerating(false);
     }
   }
 
@@ -217,6 +286,14 @@ Your role is to generate structured and professional financial reports based on 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-1500 via-primary-1400 to-primary-1300">
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast({ ...toast, show: false })} 
+        />
+      )}
+      
       <div className="p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
@@ -310,7 +387,7 @@ Your role is to generate structured and professional financial reports based on 
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-10">
-          <a href="/UpdateProfile" className="w-full sm:w-auto">
+          <a href="/grow/UpdateProfile" className="w-full sm:w-auto">
             <button className="w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 font-semibold shadow-md hover:shadow-lg text-base">
               <User className="mr-2 w-5 h-5" /> Update Profile
             </button>
@@ -330,8 +407,7 @@ Your role is to generate structured and professional financial reports based on 
                 <Search className="text-white w-6 h-6" />
               </div>
               <div className="flex items-center justify-center h-full pl-16 pr-6">
-                <Target className="mr-3 w-6 h-6 text-primary-600" />
-                <span className="flex-1 text-lg">Ask Chanakya AI Assistant</span>
+                <span className="flex-1 text-lg ml-4">Ask Chanakya AI Assistant</span>
                 <ChevronRight className="w-6 h-6 text-primary-800 group-hover:translate-x-1.5 transition-transform duration-300" />
               </div>
             </div>
@@ -361,7 +437,7 @@ Your role is to generate structured and professional financial reports based on 
               </div>
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center bg-gradient-to-r from-primary-500 to-brand-500 text-white px-8 py-4 rounded-xl hover:from-primary-600 hover:to-brand-600 transition-all duration-300 font-semibold shadow-md hover:shadow-lg text-base"
+                className="flex items-center bg-gradient-to-r from-primary-500 to-brand-500 text-white px-8 py-4 rounded-xl hover:from-primary-600 hover:to-brand-600 transition-all duration-300 font-semibold shadow-md hover:shadow-lg text-base group"
               >
                 <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
                 Generate Report
@@ -413,36 +489,77 @@ Your role is to generate structured and professional financial reports based on 
                 <button
                   onClick={() => setShowModal(false)}
                   className="p-2 hover:bg-primary-1200/50 rounded-lg transition-colors"
+                  disabled={isGenerating}
                 >
                   <X className="text-primary-300 w-6 h-6" />
                 </button>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-primary-200 font-semibold mb-2 text-base">
-                  Describe your business question or goal:
-                </label>
-                <textarea
-                  placeholder={`e.g., How can I optimize my ${industry.toLowerCase()} expenses while maintaining growth?`}
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={5}
-                  className="w-full p-4 bg-primary-1200/50 text-white rounded-xl border border-primary-1100/30 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-primary-500 resize-none text-base"
-                />
-              </div>
+              {isGenerating ? (
+                <div className="py-10 flex flex-col items-center justify-center">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-black rounded-full flex items-center justify-center shadow-lg">
+                      {thinkingSteps.map((step, index) => {
+                        const IconComponent = step.icon;
+                        return (
+                          <div
+                            key={index}
+                            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
+                              thinkingStep === index ? 'opacity-100' : 'opacity-0'
+                            }`}
+                          >
+                            <IconComponent className={`w-10 h-10 ${step.color}`} />
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="absolute -inset-3 bg-primary-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
+                  </div>
+                  
+                  <p className={`text-lg font-medium text-center mb-2 ${thinkingSteps[thinkingStep].color}`}>
+                    {thinkingSteps[thinkingStep].text}
+                  </p>
+                  <p className="text-primary-400 text-sm text-center">This may take a moment...</p>
+                  
+                  <div className="flex space-x-1 mt-6">
+                    {[0, 1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"
+                        style={{ animationDelay: `${i * 0.2}s` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    <label className="block text-primary-200 font-semibold mb-2 text-base">
+                      Describe your business question or goal:
+                    </label>
+                    <textarea
+                      placeholder={`e.g., How can I optimize my ${industry.toLowerCase()} expenses while maintaining growth?`}
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      rows={5}
+                      className="w-full p-4 bg-primary-1200/50 text-white rounded-xl border border-primary-1100/30 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-primary-500 resize-none text-base"
+                    />
+                  </div>
 
-              <button
-                onClick={generatePDF}
-                className={`w-full p-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
-                  prompt.trim() === ""
-                    ? "bg-primary-1100/50 text-primary-600 cursor-not-allowed"
-                    : "bg-gradient-to-r from-primary-500 to-brand-500 text-white hover:from-primary-600 hover:to-brand-600 shadow-md hover:shadow-lg"
-                }`}
-                disabled={prompt.trim() === ""}
-              >
-                <FileText className="w-5 h-5 mr-2" />
-                Generate Financial Report
-              </button>
+                  <button
+                    onClick={generatePDF}
+                    className={`w-full p-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center ${
+                      prompt.trim() === ""
+                        ? "bg-primary-1100/50 text-primary-600 cursor-not-allowed"
+                        : "bg-gradient-to-r from-primary-500 to-brand-500 text-white hover:from-primary-600 hover:to-brand-600 shadow-md hover:shadow-lg"
+                    }`}
+                    disabled={prompt.trim() === ""}
+                  >
+                    <FileText className="w-5 h-5 mr-2" />
+                    Generate Financial Report
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -450,5 +567,4 @@ Your role is to generate structured and professional financial reports based on 
     </div>
   )
 }
-
 export default Page

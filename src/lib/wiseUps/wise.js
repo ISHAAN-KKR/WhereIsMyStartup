@@ -19,7 +19,7 @@ export const wis =
       ],
       "what_they_d_do_differently": "Start small with a YouTube/TikTok-style launch, grow a community before going premium.",
       "takeaway_for_dreamers": "Don’t build in a bubble. Always validate your market and timing.",
-      "image": "image_placeholder_quibi.png"
+      "image": "/Pics/Fails/Quibi.jpg"
     },
     {
       "startup_name": "Theranos",
@@ -38,7 +38,7 @@ export const wis =
       ],
       "what_they_d_do_differently": "Focus on building real tech first, then raising money.",
       "takeaway_for_dreamers": "Never fake it till you make it when it comes to core technology. Build trust with honesty.",
-      "image": "image_placeholder_theranos.png"
+      "image": "/Pics/Fails/Theranos.jpg"
     },
     {
       "startup_name": "Better Place",
@@ -76,7 +76,37 @@ export const wis =
       ],
       "what_they_d_do_differently": "Invest heavily in infrastructure early, evolve product to keep users engaged.",
       "takeaway_for_dreamers": "Tech must not just be innovative — it must work reliably and evolve with users.",
-      "image": "image_placeholder_friendster.png"
+      "image": "/Pics/Fails/Friendster.png"
+    }
+  ]
+}
+
+
+export const wiser={
+  "success_stories": [
+    {
+      "index":1,
+      "heading": "Quibi",
+      "image": "/Pics/Fails/Quibi.jpg",
+      "journey": "A short-form streaming platform for mobile, where people could watch “quick bites” of content in under 10 minutes."
+    },
+    {
+       "index":2,
+      "heading": "Friendster",
+      "image": "/Pics/Fails/Friendster.jpg",
+      "journey": "One of the first social networking platforms (launched 2002) meant to connect friends online."
+    },
+    {
+       "index":3,
+      "heading": "Theranos",
+      "image": "/Pics/Fails/Theranos.jpg",
+      "journey": "To revolutionize blood testing with a device that could run hundreds of tests from just a finger prick."
+    },
+    {
+       "index":4,
+      "heading": "Better Place",
+      "image": "/Pics/Fails/wework.jpg",
+      "journey": "An ambitious electric vehicle company (2007) that wanted to build a network of battery-swapping stations to make EVs mainstream.."
     }
   ]
 }

@@ -109,7 +109,7 @@ const UpdatePage = () => {
       <div className="max-w-6xl mx-auto">
         {/* Breadcrumb Navigation */}
         <div className="text-primary-300 text-sm mb-6 flex items-center space-x-1">
-          <Link href="/Dashboard" className="hover:text-brand-400 transition">Dashboard</Link>
+          <Link href="/grow/dashboard" className="hover:text-brand-400 transition">Dashboard</Link>
           <ChevronRight className="w-4 h-4" />
           <span className="text-brand-400">Profile</span>
         </div>

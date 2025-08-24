@@ -2,11 +2,39 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, Legend, BarChart, Bar } from "recharts";
-import { AlertCircle, ChevronRight, TrendingUp, DollarSign, PieChart as PieChartIcon, ArrowUp, ArrowDown } from "lucide-react";
+import { AlertCircle, ChevronRight, TrendingUp, DollarSign, PieChart as PieChartIcon, ArrowUp, ArrowDown, Lightbulb, Target, Rocket, Zap } from "lucide-react";
 import Link from "next/link";
-
+import { motion } from "framer-motion";
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, ""); // Remove trailing slash if any
 const COLORS = ["#6366F1", "#8B5CF6", "#EC4899", "#10B981", "#F59E0B"];
+
+// Inspirational quotes for loading state
+const startupQuotes = [
+  {
+    text: "The biggest risk is not taking any risk. In a world that is changing really quickly, the only strategy that is guaranteed to fail is not taking risks.",
+    author: "Mark Zuckerberg"
+  },
+  {
+    text: "If you are not embarrassed by the first version of your product, you've launched too late.",
+    author: "Reid Hoffman"
+  },
+  {
+    text: "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.",
+    author: "Steve Jobs"
+  },
+  {
+    text: "Don't worry about failure; you only have to be right once.",
+    author: "Drew Houston"
+  },
+  {
+    text: "The way to get started is to quit talking and begin doing.",
+    author: "Walt Disney"
+  },
+  {
+    text: "Ideas are easy. Implementation is hard.",
+    author: "Guy Kawasaki"
+  }
+];
 
 const UserDataDisplay = () => {
   const { user, isLoaded } = useUser();
@@ -15,6 +43,18 @@ const UserDataDisplay = () => {
   const [expenseData, setExpenseData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+
+  // Rotate through quotes every 5 seconds during loading
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      interval = setInterval(() => {
+        setCurrentQuoteIndex((prev) => (prev + 1) % startupQuotes.length);
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const fetchUserData = useCallback(async (userId) => {
     if (!API_URL) {
@@ -85,12 +125,42 @@ const UserDataDisplay = () => {
 
   const growthPercentage = calculateGrowth();
 
+  // Custom tooltip for charts with better visibility
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-primary-1200/95 backdrop-blur-sm p-4 rounded-lg border border-primary-1000/50 shadow-xl">
+          <p className="text-primary-100 font-semibold">{`Year: ${label}`}</p>
+          <p className="text-brand-400">
+            {`Revenue: ₹${payload[0].value.toLocaleString()}`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Custom tooltip for pie chart
+  const CustomPieTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-primary-1200/95 backdrop-blur-sm p-4 rounded-lg border border-primary-1000/50 shadow-xl">
+          <p className="text-primary-100 font-semibold">{payload[0].name}</p>
+          <p className="text-brand-400">
+            {`${payload[0].value}%`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-1500 to-primary-1400 p-6 text-white">
       <div className="max-w-7xl mx-auto">
         {/* Breadcrumb */}
         <div className="self-start text-primary-300 text-sm mb-6 flex items-center space-x-1">
-          <Link href="/Dashboard" className="hover:text-brand-400 transition">Dashboard</Link>
+          <Link href="/grow/dashboard" className="hover:text-brand-400 transition">Dashboard</Link>
           <ChevronRight className="w-4 h-4" />
           <span className="text-brand-400">Analytics</span>
         </div>
@@ -109,8 +179,61 @@ const UserDataDisplay = () => {
         )}
 
         {loading ? (
-          <div className="flex justify-center items-center w-full h-80">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
+          <div className="flex flex-col justify-center items-center w-full h-96 py-12">
+            <motion.div
+              className="relative mb-8"
+              initial={{ scale: 0.8, rotate: -10 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 260, 
+                damping: 20,
+                duration: 0.5
+              }}
+            >
+              <div className="relative">
+                <div className="w-24 h-24 bg-gradient-to-br from-brand-500 to-brand-700 rounded-full flex items-center justify-center shadow-lg">
+                  <Rocket className="h-12 w-12 text-white" />
+                </div>
+                <motion.div
+                  className="absolute -inset-4 bg-brand-500 rounded-full opacity-20 blur-xl"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                />
+              </div>
+            </motion.div>
+            
+            <motion.div
+              key={currentQuoteIndex}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5 }}
+              className="text-center max-w-2xl"
+            >
+              <p className="text-xl font-medium text-brand-300 mb-4">
+                "{startupQuotes[currentQuoteIndex].text}"
+              </p>
+              <p className="text-primary-300">— {startupQuotes[currentQuoteIndex].author}</p>
+            </motion.div>
+            
+            <div className="flex space-x-1 mt-8">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-3 h-3 bg-brand-500 rounded-full"
+                  animate={{ 
+                    scale: [1, 1.5, 1],
+                    opacity: [0.5, 1, 0.5]
+                  }}
+                  transition={{ 
+                    duration: 1.5, 
+                    repeat: Infinity,
+                    delay: i * 0.2
+                  }}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <>
@@ -175,27 +298,18 @@ const UserDataDisplay = () => {
                         <stop offset="95%" stopColor="#6366F1" stopOpacity={0.1} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" strokeOpacity={0.2} />
                     <XAxis 
                       dataKey="year" 
-                      tick={{ fill: "#9CA3AF" }} 
-                      axisLine={false}
+                      tick={{ fill: "#D1D5DB" }} 
+                      axisLine={{ stroke: "#4B5563", strokeOpacity: 0.3 }}
                     />
                     <YAxis 
-                      tick={{ fill: "#9CA3AF" }} 
-                      axisLine={false}
+                      tick={{ fill: "#D1D5DB" }} 
+                      axisLine={{ stroke: "#4B5563", strokeOpacity: 0.3 }}
                       tickFormatter={(value) => `₹${value / 1000}k`}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: "rgba(17, 24, 39, 0.8)", 
-                        backdropFilter: "blur(4px)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)", 
-                        borderRadius: "0.5rem",
-                        color: "#fff" 
-                      }} 
-                      formatter={(value) => [`₹${value.toLocaleString()}`, "Revenue"]}
-                    />
+                    <Tooltip content={<CustomTooltip />} />
                     <Area 
                       type="monotone" 
                       dataKey="revenue" 
@@ -229,26 +343,21 @@ const UserDataDisplay = () => {
                       outerRadius={90}
                       paddingAngle={2}
                       dataKey="value"
-                      label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                      label={({ name, percent }) => `${name.split(' ')[0]} (${(percent * 100).toFixed(0)}%)`}
                       labelLine={false}
                     >
                       <Cell fill="#6366F1" />
                       <Cell fill="#4B5563" />
                     </Pie>
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: "rgba(17, 24, 39, 0.8)", 
-                        backdropFilter: "blur(4px)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)", 
-                        borderRadius: "0.5rem",
-                        color: "#fff" 
-                      }} 
-                      formatter={(value) => [`${value}%`, ""]}
-                    />
+                    <Tooltip content={<CustomPieTooltip />} />
                     <Legend 
                       iconType="circle" 
                       iconSize={10}
-                      wrapperStyle={{ fontSize: '12px', color: '#9CA3AF' }}
+                      wrapperStyle={{ 
+                        fontSize: '12px', 
+                        color: '#D1D5DB',
+                        paddingTop: '20px'
+                      }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
