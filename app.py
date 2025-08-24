@@ -1,8 +1,15 @@
+#app.py
 import json
 from settings import *
 from model import User
 from helpers import generate_pdf
 from ai_models import predict_revenue, predict_profitability
+# # Add this import at the top of your app.py (after your existing imports)
+# import sys
+# import os
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'grow_industry_analysis'))
+# from main import analyze_industry
+
 
 @app.route('/', methods=['POST','GET'])
 @cross_origin()
@@ -91,26 +98,63 @@ def predictRevenue():
         return jsonify({"revenue":json_data, "profit_margin":predicted_profit}), 201
     else:
         return jsonify({"message":"User not found"}), 500
-
-# @app.route('/chatBot', methods=['POST'])
+# @app.route('/industryAnalysis', methods=['POST'])
 # @cross_origin()
-# def chatBot():
-#     data=request.json
-#     if "chat_history" not in data:
-#         return jsonify({"message":"Provide required fields."}), 400
+# def industry_analysis():
+#     """
+#     Endpoint for industry analysis using RAG.
+#     """
+#     data = request.json
     
-#     init_data=data.get('chat_history')
+#     # Validate required fields
+#     if not all(field in data for field in ['query', 'industry']):
+#         return jsonify({"message": "Provide required fields: query, industry"}), 400
+    
+#     query = data.get('query')
+#     industry = data.get('industry')
+    
 #     try:
-#         response = client.chat.completions.create(
-#             model="llama-3.1-8b-instant",
-#             messages=init_data
-#         )
-#         # final_data = init_data.append({"role": "assistant", "content": response.choices[0].message.content})
-#         # final_data = {"role": "assistant", "content": response.choices[0].message.content}
-#         print(response.choices[0].message.content)
-#         return jsonify({"message":response.choices[0].message.content}), 201
+#         # Get analysis using main.py function
+#         result = analyze_industry(query, industry)
+        
+#         if result['success']:
+#             return jsonify({
+#                 "success": True,
+#                 "message": "Analysis completed successfully",
+#                 "analysis": result['analysis'],
+#                 "industry": industry,
+#                 "query": query
+#             }), 201
+#         else:
+#             return jsonify({
+#                 "success": False,
+#                 "message": result['message']
+#             }), 400
+            
 #     except Exception as e:
-#         return jsonify({"message":f"Error occured:{str(e)}"}), 500
+#         return jsonify({
+#             "success": False,
+#             "message": f"Error occurred: {str(e)}"
+#         }), 500
+@app.route('/chatBot2', methods=['POST'])
+@cross_origin()
+def chatBot2():
+    data=request.json
+    if "chat_history" not in data:
+        return jsonify({"message":"Provide required fields."}), 400
+    
+    init_data=data.get('chat_history')
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=init_data
+        )
+        # final_data = init_data.append({"role": "assistant", "content": response.choices[0].message.content})
+        # final_data = {"role": "assistant", "content": response.choices[0].message.content}
+        print(response.choices[0].message.content)
+        return jsonify({"message":response.choices[0].message.content}), 201
+    except Exception as e:
+        return jsonify({"message":f"Error occured:{str(e)}"}), 500
 
 @app.route('/chatBot', methods=['POST'])
 @cross_origin()
@@ -138,7 +182,7 @@ def chatBot():
 
         # Make request to Gemini API
         response = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={os.getenv('GOOGLE_API_KEY')}",
+            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={os.getenv('GOOGLE_API_KEY')}",
             headers={"Content-Type": "application/json"},
             json=payload
         )
@@ -148,6 +192,7 @@ def chatBot():
             return jsonify({"message": f"Error from Gemini API: {response.text}"}), 500
 
         result = response.json()
+        print("################\n", result)
         reply_text = result["candidates"][0]["content"]["parts"][0]["text"]
 
         return jsonify({"message": reply_text}), 201
@@ -166,7 +211,7 @@ def send_pdf_email():
     
     try:
         response=requests.post(
-            'http://localhost:5000/chatBot',
+            'http://localhost:5000/chatBot2',
             json={"chat_history":data.get('prompt')}
         )
         if response.status_code == 201:
@@ -205,6 +250,7 @@ The ArthaShastra Team 🏆
         return jsonify({"message":"Email sent successfully!"}), 201
 
     except Exception as e:
+        print(str(e))
         return jsonify({"message":f"Error: {str(e)}"}), 500
     
 if __name__ == '__main__':
