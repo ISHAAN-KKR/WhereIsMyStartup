@@ -47,4 +47,4 @@ def predict_profitability(category, revenue, savings):
     user_scaled = scaler.transform(user_df)
     prediction = model.predict(user_scaled)[0]
     
-    return prediction
+    return prediction
