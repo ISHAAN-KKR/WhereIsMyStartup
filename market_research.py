@@ -11,39 +11,20 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 market_research_bp = Blueprint('market_research', __name__)
 
 MARKET_RESEARCH_PROMPT = """
-Conduct comprehensive market research on the following startup idea: "{}".
+Conduct comprehensive market research on the following startup idea: "{}"
 
-Please provide the results in the following structured JSON format:
-
-json-syntax = [
-  {
-    "text": "analysis or insight text",
-    "graph-data": [numeric_values_showing_industry_trend_or_relevant_data]
-  }
-]
-
-example = [
-  {
-    "text": "Competitor analysis: XYZ and ABC dominate the market with strong brand presence...",
-    "graph-data": [10, 20, 30, 40, 10, 5, 1.2]
-  }
-]
-
-Your analysis should cover:
+Please provide:
 1. Target Audience Analysis
 2. Market Size and Potential
-3. Competitor Analysis (3-5 competitors minimum)
+3. Competitor Analysis (at least 3-5 competitors)
 4. Market Trends and Opportunities
 5. Pricing Strategy Suggestions
 6. Go-to-Market Strategy
 7. Potential Challenges and Risks
 
-Output rules:
-- Return only valid JSON following the specified syntax.
-- Ensure the JSON array contains multiple objects for different sections.
-- "graph-data" should always be a numeric array, even if approximate.
+Format the response in a structured, professional manner.
+Focus on practical, actionable suggestions that add real value.
 """
-
 
 def call_gemini_api(prompt, model="gemini-2.0-flash"):
     """
