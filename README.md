@@ -6,7 +6,7 @@
 
 ## Live Demo
 
-[Explore **WhereIsMyStartup** live](https://whereismystartup.vercel.app/) 
+[Explore **WhereIsMyStartup** ]([https://whereismystartup.vercel.app/](https://where-is-my-startup.vercel.app/)) 
 
 ## 🚀 About the Project
 
